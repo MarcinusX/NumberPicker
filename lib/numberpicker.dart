@@ -4,13 +4,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-//NumberPicker is a widget designed to use inside of SimpleDialog
-//It allows user to choose number between #minValue and %maxValue
+/// Created by Marcin Szałek
+
+///NumberPicker is a widget designed to use inside of SimpleDialog
+///It allows user to choose number between #minValue and %maxValue
 class NumberPicker extends StatefulWidget {
   static const String defaultConfirmText = "OK";
   static const String defaultCancelText = "CANCEL";
 
-  //constructor for integer number picker
+  ///constructor for integer number picker
   factory NumberPicker.integer({
     Key key,
     @required int initialValue,
@@ -35,7 +37,7 @@ class NumberPicker extends StatefulWidget {
         key: key);
   }
 
-  //constructor for decimal number picker
+  ///constructor for decimal number picker
   factory NumberPicker.decimal({
     Key key,
     @required double initialValue,
@@ -55,8 +57,9 @@ class NumberPicker extends StatefulWidget {
         minValue: minValue,
         maxValue: maxValue,
         initialIntValue: initialValue.floor(),
-        //the decimal part transformed to integer,
-        //e.g. initialValue = 7.26 => initialDecimalValue = 26
+
+        ///the decimal part transformed to integer,
+        ///e.g. initialValue = 7.26 => initialDecimalValue = 26
         initialDecimalValue: ((initialValue - initialValue.floorToDouble()) *
                 pow(10, decimalPlaces))
             .floor(),
@@ -66,7 +69,7 @@ class NumberPicker extends StatefulWidget {
         key: key);
   }
 
-  //internal constructor
+  ///internal constructor
   NumberPicker._internal({
     Key key,
     @required this.minValue,
@@ -79,54 +82,60 @@ class NumberPicker extends StatefulWidget {
   })
       : super(key: key);
 
-  //min value user can pick
+  ///min value user can pick
   final int minValue;
 
-  //max value user can pick
+  ///max value user can pick
   final int maxValue;
 
-  //initial integer value to be selected
+  ///initial integer value to be selected
   final int initialIntValue;
 
-  //initial decimal value to be selected
+  ///initial decimal value to be selected
   final int initialDecimalValue;
 
-  //inidcates how many decimal places to show
-  // e.g. 0=>[1,2,3...], 1=>[1.0, 1.1, 1.2...]  2=>[1.00, 1.01, 1.02...]
+  ///inidcates how many decimal places to show
+  /// e.g. 0=>[1,2,3...], 1=>[1.0, 1.1, 1.2...]  2=>[1.00, 1.01, 1.02...]
   final int decimalPlaces;
 
-  //text to be displayed in confirmation button
+  ///text to be displayed in confirmation button
   final String confirmText;
 
-  //text to be displayed in cancel button
+  ///text to be displayed in cancel button
   final String cancelText;
 
   @override
   _NumberPickerState createState() => new _NumberPickerState();
 }
 
-//State of NumberPicker
+///State of NumberPicker
 class _NumberPickerState extends State<NumberPicker> {
-  //height of every list element
+  ///height of every list element
   static const double _itemExtent = 50.0;
 
-  //view will always contain only 3 elements of list
+  ///view will always contain only 3 elements of list
   static const double _listViewHeight = 3 * (_itemExtent - 2.0);
 
-  //width of list view
+  ///width of list view
   static const double _listViewWidth = 100.0;
 
-  //ScrollController used for integer list
+  ///ScrollController used for integer list
   ScrollController intScrollController;
 
-  //ScrollController used for decimal list
+  ///ScrollController used for decimal list
   ScrollController decimalScrollController;
 
-  //Currently selected integer value
+  ///Currently selected integer value
   int selectedIntValue;
 
-  //Currently selected decimal value
+  ///Currently selected decimal value
   int selectedDecimalValue;
+
+  ///Default text style
+  TextStyle _defaultStyle;
+
+  ///Selected text style
+  TextStyle _selectedStyle;
 
   @override
   void initState() {
@@ -149,10 +158,13 @@ class _NumberPickerState extends State<NumberPicker> {
   //----------------------------- VIEWS -----------------------------
   //
 
-  //main widget
+  ///main widget
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
+    _defaultStyle = themeData.textTheme.body1;
+    _selectedStyle = themeData.textTheme.headline
+        .copyWith(color: themeData.accentColor);
 
     return new Column(
       children: <Widget>[
@@ -162,8 +174,8 @@ class _NumberPickerState extends State<NumberPicker> {
     );
   }
 
-  //creates one listview if in integer version
-  //or a row with two listviews if in decimal version
+  ///creates one listview if in integer version
+  ///or a row with two listviews if in decimal version
   Widget _initMainView(ThemeData themeData) {
     if (widget.decimalPlaces == 0) {
       return _integerListView(themeData);
@@ -179,8 +191,6 @@ class _NumberPickerState extends State<NumberPicker> {
   }
 
   Widget _integerListView(ThemeData themeData) {
-    final TextStyle style = themeData.textTheme.body1;
-
     int itemCount = widget.maxValue - widget.minValue + 3;
 
     return new NotificationListener(
@@ -196,9 +206,7 @@ class _NumberPickerState extends State<NumberPicker> {
 
             //define special style for selected (middle) element
             final TextStyle itemStyle = value == selectedIntValue
-                ? themeData.textTheme.headline
-                    .copyWith(color: themeData.accentColor)
-                : style;
+                ? _selectedStyle : _defaultStyle;
 
             bool isExtra = index == 0 || index == itemCount - 1;
 
@@ -215,8 +223,6 @@ class _NumberPickerState extends State<NumberPicker> {
   }
 
   Widget _decimalListView(ThemeData themeData) {
-    final TextStyle style = themeData.textTheme.body1;
-
     int itemCount = selectedIntValue == widget.maxValue
         ? 3
         : pow(10, widget.decimalPlaces) + 2;
@@ -233,10 +239,8 @@ class _NumberPickerState extends State<NumberPicker> {
             final int value = index - 1;
 
             //define special style for selected (middle) element
-            final TextStyle itemStyle = value == selectedDecimalValue
-                ? themeData.textTheme.headline
-                    .copyWith(color: themeData.accentColor)
-                : style;
+            final TextStyle itemStyle = value == selectedIntValue
+                ? _selectedStyle : _defaultStyle;
 
             bool isExtra = index == 0 || index == itemCount - 1;
 
@@ -254,7 +258,7 @@ class _NumberPickerState extends State<NumberPicker> {
     );
   }
 
-  //view containing confirm and cancel buttons
+  ///view containing confirm and cancel buttons
   Widget _initBottomView() {
     return new ButtonTheme.bar(
       child: new ButtonBar(
@@ -293,11 +297,16 @@ class _NumberPickerState extends State<NumberPicker> {
     Navigator.of(context).pop(returnValue);
   }
 
+  bool _userStoppedScrolling(Notification notification,
+      ScrollController scrollController) {
+    return notification is UserScrollNotification &&
+        notification.direction == ScrollDirection.idle &&
+        !(scrollController.position.activity is HoldScrollActivity);
+  }
+
   bool _onIntegerNotification(Notification notification) {
     if (notification is ScrollNotification) {
-      if (notification is UserScrollNotification &&
-          notification.direction == ScrollDirection.idle &&
-          !(intScrollController.position.activity is HoldScrollActivity)) {
+      if (_userStoppedScrolling(notification, intScrollController)) {
         //center selected value
         _animate(intScrollController,
             (selectedIntValue - widget.minValue) * _itemExtent);
@@ -318,9 +327,7 @@ class _NumberPickerState extends State<NumberPicker> {
 
   bool _onDecimalNotification(Notification notification) {
     if (notification is ScrollNotification) {
-      if (notification is UserScrollNotification &&
-          notification.direction == ScrollDirection.idle &&
-          !(decimalScrollController.position.activity is HoldScrollActivity)) {
+      if (_userStoppedScrolling(notification, decimalScrollController)) {
         //center selected value
         _animate(decimalScrollController, selectedDecimalValue * _itemExtent);
       } else {
@@ -356,7 +363,7 @@ class _NumberPickerState extends State<NumberPicker> {
     setState(() => selectedDecimalValue = newSelectedDecimalValue);
   }
 
-  //scroll to selected value
+  ///scroll to selected value
   _animate(ScrollController scrollController, double value) {
     scrollController.animateTo(value,
         duration: new Duration(seconds: 1), curve: new ElasticOutCurve());
