@@ -239,7 +239,7 @@ class _NumberPickerState extends State<NumberPicker> {
             final int value = index - 1;
 
             //define special style for selected (middle) element
-            final TextStyle itemStyle = value == selectedIntValue
+            final TextStyle itemStyle = value == selectedDecimalValue
                 ? _selectedStyle : _defaultStyle;
 
             bool isExtra = index == 0 || index == itemCount - 1;
@@ -352,7 +352,8 @@ class _NumberPickerState extends State<NumberPicker> {
       selectedIntValue = newSelectedIntValue;
       //if integer is at max value, then set decimal places to 0
       if (widget.decimalPlaces > 0 && selectedIntValue == widget.maxValue) {
-        decimalScrollController.animateTo(1.5 * _itemExtent,
+        double multiplier = selectedDecimalValue == 1 ? 0.5 : 1.5;
+        decimalScrollController.animateTo(multiplier * _itemExtent,
             duration: new Duration(microseconds: 1),
             curve: new ElasticOutCurve());
       }
