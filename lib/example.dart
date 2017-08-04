@@ -8,7 +8,6 @@ void main() {
 }
 
 class ExampleApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -32,22 +31,60 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIntValue = 10;
-  double _currentDoubleValue = 5.5;
+  double _currentDoubleValue = 3.0;
+  NumberPicker integerNumberPicker;
+  NumberPicker decimalNumberPicker;
+
+  _handleValueChanged(num value) {
+    if (value != null) {
+      if (value is int) {
+        setState(() => _currentIntValue = value);
+      } else {
+        setState(() => _currentDoubleValue = value);
+      }
+    }
+  }
+
+  _handleValueChangedExternally(num value) {
+    if (value != null) {
+      if (value is int) {
+        setState(() => _currentIntValue = value);
+        integerNumberPicker.animateInt(value);
+      } else {
+        setState(() => _currentDoubleValue = value);
+        decimalNumberPicker.animateDecimalAndInteger(value);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    integerNumberPicker = new NumberPicker.integer(
+      initialValue: _currentIntValue,
+      minValue: 0,
+      maxValue: 100,
+      onChanged: _handleValueChanged,
+    );
+    decimalNumberPicker = new NumberPicker.decimal(
+        initialValue: _currentDoubleValue,
+        minValue: 1,
+        maxValue: 5,
+        decimalPlaces: 2,
+        onChanged: _handleValueChanged);
     return new Scaffold(
         appBar: new AppBar(
           title: new Text(widget.title),
         ),
         body: new Center(
           child: new Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              integerNumberPicker,
               new RaisedButton(
                 onPressed: () => _showIntDialog(),
                 child: new Text("Current int value: $_currentIntValue"),
               ),
+              decimalNumberPicker,
               new RaisedButton(
                 onPressed: () => _showDoubleDialog(),
                 child: new Text("Current double value: $_currentDoubleValue"),
@@ -58,43 +95,25 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future _showIntDialog() async {
-    await showDialog<int>(
+    await showDialog(
       context: context,
-      child: new SimpleDialog(
-        children: [
-          new NumberPicker.integer(initialValue: 50,
-            minValue: 1,
-            maxValue: 100,
-            confirmText: "CONFIRM",)
-        ],
-        title: new Text("Integer NumberPicker"),
-      ),
-    ).then((value) {
-      if (value != null) {
-        setState(() => _currentIntValue = value);
-      }
-    });
+      child: new NumberPickerDialog.integer(
+          minValue: 0, maxValue: 100, initialIntegerValue: _currentIntValue),
+    )
+        .then(_handleValueChangedExternally);
   }
 
   Future _showDoubleDialog() async {
-    await showDialog<double>(
+    await showDialog(
       context: context,
-      child: new SimpleDialog(
-        children: [
-          new NumberPicker.decimal(
-            minValue: 1,
-            maxValue: 10,
-            initialValue: _currentDoubleValue,
-            decimalPlaces: 2,
-          ),
-        ],
-        title: new Text("Decimal NumberPicker"),
+      child: new NumberPickerDialog.decimal(
+        minValue: 1,
+        maxValue: 5,
+        decimalPlaces: 2,
+        initialDoubleValue: _currentDoubleValue,
+        title: new Text("Pick a decimal number"),
       ),
-    ).then((value) {
-      if (value != null) {
-        setState(() => _currentDoubleValue = value);
-      }
-    });
+    )
+        .then(_handleValueChangedExternally);
   }
-
 }
