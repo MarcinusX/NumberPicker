@@ -3,6 +3,7 @@
 NumberPicker is a custom widget designed for choosing an integer or decimal number by scrolling spinners.
 
 It is possible to use NumberPicker as a standalone widget as well as in NumberPickerDialog.
+![vertical](https://raw.githubusercontent.com/MarcinusX/NumberPicker/master/example/screenshots/gif_example.gif)
 
 ## Getting Started
 #### Creating NumberPicker Widget
@@ -25,7 +26,7 @@ new NumberPickerDialog.decimal(
 See examples directory for full examples.
 
 #### Standalone widget
-
+![vertical](https://raw.githubusercontent.com/MarcinusX/NumberPicker/master/example/screenshots/gif_widget.gif)
 ```
 class _MyHomePageState extends State<MyHomePage> {
   int _currentValue = 1;
@@ -58,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 #### Dialog
+![vertical](https://raw.githubusercontent.com/MarcinusX/NumberPicker/master/example/screenshots/gif_dialog.gif)
 ```
 class _MyHomePageState extends State<MyHomePage> {
   double _currentPrice = 1.0;
