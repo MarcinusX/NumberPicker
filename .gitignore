@@ -4,7 +4,7 @@
 .packages
 .pub/
 build/
-ios/.generated/
+example/ios/.generated/
 packages
 pubspec.lock
 .flutter-plugins
