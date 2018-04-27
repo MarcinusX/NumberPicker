@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new NumberPicker.integer(
+            new NumberPicker.decimal(
                 initialValue: _currentValue,
                 minValue: 0,
                 maxValue: 100,
