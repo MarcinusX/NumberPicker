@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialog<int>(
       context: context,
       builder: (BuildContext context) {
-        return new NumberPickerDialog.integer(
+        return new NumberPickerDialog.decimal(
           minValue: 1,
           maxValue: 10,
           title: new Text("Pick a new price"),
