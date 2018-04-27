@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new NumberPicker.decimal(
+            new NumberPicker.integer(
                 initialValue: _currentValue,
                 minValue: 0,
                 maxValue: 100,
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     showDialog<int>(
       context: context,
       builder: (BuildContext context) {
-        return new NumberPickerDialog.integer(
+        return new NumberPickerDialog.decimal(
           minValue: 1,
           maxValue: 10,
           title: new Text("Pick a new price"),
