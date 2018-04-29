@@ -70,7 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
         minValue: 1,
         maxValue: 5,
         decimalPlaces: 2,
-        onChanged: _handleValueChanged);
+        onChanged: _handleValueChanged
+    );
     return new Scaffold(
         appBar: new AppBar(
           title: new Text(widget.title),
@@ -95,25 +96,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future _showIntDialog() async {
-    await showDialog(
+    await showDialog<num>(
       context: context,
-      child: new NumberPickerDialog.integer(
-          minValue: 0, maxValue: 100, initialIntegerValue: _currentIntValue),
-    )
-        .then(_handleValueChangedExternally);
+      builder: (BuildContext context) {
+        return new NumberPickerDialog.integer(
+            minValue: 0, maxValue: 100, initialIntegerValue: _currentIntValue);
+      },
+    ).then(_handleValueChangedExternally);
   }
 
   Future _showDoubleDialog() async {
-    await showDialog(
+    await showDialog<num>(
       context: context,
-      child: new NumberPickerDialog.decimal(
-        minValue: 1,
-        maxValue: 5,
-        decimalPlaces: 2,
-        initialDoubleValue: _currentDoubleValue,
-        title: new Text("Pick a decimal number"),
-      ),
-    )
-        .then(_handleValueChangedExternally);
+      builder: (BuildContext context) {
+        return new NumberPickerDialog.decimal(
+            minValue: 1,
+            maxValue: 5,
+            decimalPlaces: 2,
+            initialDoubleValue: _currentDoubleValue,
+            title: new Text("Pick a decimal number"));
+      },
+    ).then(_handleValueChangedExternally);
   }
 }
