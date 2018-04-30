@@ -31,17 +31,17 @@ class _MyHomePageState extends State<MyHomePage> {
   double _currentPrice = 1.0;
 
   void _showDialog() {
-    showDialog<int>(
-      context: context,
+    showDialog<double>(
+    context: context,
       builder: (BuildContext context) {
         return new NumberPickerDialog.decimal(
-          minValue: 1,
-          maxValue: 10,
-          title: new Text("Pick a new price"),
-          initialDoubleValue: _currentPrice,
+          minValue: 1,
+          maxValue: 10,
+          title: new Text("Pick a new price"),
+          initialDoubleValue: _currentPrice,
         );
       }
-    ).then((int value)) {
+    ).then((double value) {
       if (value != null) {
         setState(() => _currentPrice = value);
       }
