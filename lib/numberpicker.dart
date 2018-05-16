@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -58,14 +58,14 @@ class NumberPicker extends StatelessWidget {
         assert(initialValue >= minValue && initialValue <= maxValue),
         selectedIntValue = initialValue.floor(),
         selectedDecimalValue = ((initialValue - initialValue.floorToDouble()) *
-            pow(10, decimalPlaces))
+            math.pow(10, decimalPlaces))
             .round(),
         intScrollController = new ScrollController(
           initialScrollOffset: (initialValue.floor() - minValue) * itemExtent,
         ),
         decimalScrollController = new ScrollController(
           initialScrollOffset: ((initialValue - initialValue.floorToDouble()) *
-              pow(10, decimalPlaces))
+              math.pow(10, decimalPlaces))
               .roundToDouble() *
               itemExtent,
         ),
@@ -122,7 +122,7 @@ class NumberPicker extends StatelessWidget {
     print(valueToSelect);
     animateInt(valueToSelect.floor());
     animateDecimal(((valueToSelect - valueToSelect.floorToDouble()) *
-        pow(10, decimalPlaces))
+        math.pow(10, decimalPlaces))
         .round());
   }
 
@@ -190,7 +190,7 @@ class NumberPicker extends StatelessWidget {
     themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
     int itemCount =
-    selectedIntValue == maxValue ? 3 : pow(10, decimalPlaces) + 2;
+    selectedIntValue == maxValue ? 3 : math.pow(10, decimalPlaces) + 2;
 
     return new NotificationListener(
       child: new Container(
@@ -233,6 +233,7 @@ class NumberPicker extends StatelessWidget {
       int intIndexOfMiddleElement =
           (notification.metrics.pixels + _listViewHeight / 2) ~/ itemExtent;
       int intValueInTheMiddle = minValue + intIndexOfMiddleElement - 1;
+      intValueInTheMiddle = _normalizeMiddleValue(intValueInTheMiddle);
 
       if (_userStoppedScrolling(notification, intScrollController)) {
         //center selected value
@@ -268,6 +269,7 @@ class NumberPicker extends StatelessWidget {
       int indexOfMiddleElement =
           (notification.metrics.pixels + _listViewHeight / 2) ~/ itemExtent;
       int decimalValueInTheMiddle = indexOfMiddleElement - 1;
+      decimalValueInTheMiddle = _normalizeMiddleValue(decimalValueInTheMiddle);
 
       if (_userStoppedScrolling(notification, decimalScrollController)) {
         //center selected value
@@ -285,6 +287,13 @@ class NumberPicker extends StatelessWidget {
     return true;
   }
 
+  ///When overscroll occurs on iOS,
+  ///we can end up with value not in the range between [minValue] and [maxValue]
+  ///To avoid going out of range, we change values out of range to border values.
+  int _normalizeMiddleValue(int valueInTheMiddle) {
+    return math.max(math.min(valueInTheMiddle, maxValue), minValue);
+  }
+
   ///indicates if user has stopped scrolling so we can center value in the middle
   bool _userStoppedScrolling(Notification notification,
       ScrollController scrollController) {
@@ -297,7 +306,7 @@ class NumberPicker extends StatelessWidget {
   ///e.g. decimalPlaces = 1, value = 4  >>> result = 0.4
   ///     decimalPlaces = 2, value = 12 >>> result = 0.12
   double _toDecimal(int decimalValueAsInteger) {
-    return double.parse((decimalValueAsInteger * pow(10, -decimalPlaces))
+    return double.parse((decimalValueAsInteger * math.pow(10, -decimalPlaces))
         .toStringAsFixed(decimalPlaces));
   }
 
@@ -409,4 +418,3 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
     );
   }
 }
-
