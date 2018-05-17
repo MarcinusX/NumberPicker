@@ -1,3 +1,7 @@
+## [0.1.2]
+
+* Added environment restrictions
+
 ## [0.1.1]
 
 * Fixed iOS overscroll bug
