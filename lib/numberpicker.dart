@@ -119,7 +119,6 @@ class NumberPicker extends StatelessWidget {
   }
 
   animateDecimalAndInteger(double valueToSelect) {
-    print(valueToSelect);
     animateInt(valueToSelect.floor());
     animateDecimal(((valueToSelect - valueToSelect.floorToDouble()) *
         math.pow(10, decimalPlaces))
@@ -163,6 +162,7 @@ class NumberPicker extends StatelessWidget {
           controller: intScrollController,
           itemExtent: itemExtent,
           itemCount: itemCount,
+          cacheExtent: _calculateCacheExtent(itemCount),
           itemBuilder: (BuildContext context, int index) {
             final int value = minValue + index - 1;
 
@@ -175,8 +175,8 @@ class NumberPicker extends StatelessWidget {
             return isExtra
                 ? new Container() //empty first and last element
                 : new Center(
-                    child: new Text(value.toString(), style: itemStyle),
-                  );
+              child: new Text(value.toString(), style: itemStyle),
+            );
           },
         ),
       ),
@@ -212,10 +212,10 @@ class NumberPicker extends StatelessWidget {
             return isExtra
                 ? new Container() //empty first and last element
                 : new Center(
-                    child: new Text(
-                        value.toString().padLeft(decimalPlaces, '0'),
-                        style: itemStyle),
-                  );
+              child: new Text(
+                  value.toString().padLeft(decimalPlaces, '0'),
+                  style: itemStyle),
+            );
           },
         ),
       ),
@@ -285,6 +285,17 @@ class NumberPicker extends StatelessWidget {
       }
     }
     return true;
+  }
+
+  ///There was a bug, when if there was small integer range, e.g. from 1 to 5,
+  ///When user scrolled to the top, whole listview got displayed.
+  ///To prevent this we are calculating cacheExtent by our own so it gets smaller if number of items is smaller
+  double _calculateCacheExtent(int itemCount) {
+    double cacheExtent = 250.0; //default cache extent
+    if ((itemCount - 2) * DEFAULT_ITEM_EXTENT <= cacheExtent) {
+      cacheExtent = ((itemCount - 3) * DEFAULT_ITEM_EXTENT);
+    }
+    return cacheExtent;
   }
 
   ///When overscroll occurs on iOS,
@@ -410,9 +421,10 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
           child: widget.cancelWidget,
         ),
         new FlatButton(
-            onPressed: () => Navigator.of(context).pop(widget.decimalPlaces > 0
-                ? selectedDoubleValue
-                : selectedIntValue),
+            onPressed: () =>
+                Navigator.of(context).pop(widget.decimalPlaces > 0
+                    ? selectedDoubleValue
+                    : selectedIntValue),
             child: widget.confirmWidget),
       ],
     );
