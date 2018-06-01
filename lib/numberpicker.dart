@@ -12,7 +12,7 @@ class NumberPicker extends StatelessWidget {
   static const double DEFAULT_ITEM_EXTENT = 50.0;
 
   ///width of list view
-  static const double DEFUALT_LISTVIEW_WIDTH = 100.0;
+  static const double DEFAULT_LISTVIEW_WIDTH = 100.0;
 
   ///constructor for integer number picker
   NumberPicker.integer({
@@ -21,8 +21,9 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    this.forceOnChanged = false,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
-    this.listViewWidth = DEFUALT_LISTVIEW_WIDTH,
+    this.listViewWidth = DEFAULT_LISTVIEW_WIDTH,
   })
       : assert(initialValue != null),
         assert(minValue != null),
@@ -46,9 +47,10 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    this.forceOnChanged = false,
     this.decimalPlaces = 1,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
-    this.listViewWidth = DEFUALT_LISTVIEW_WIDTH,
+    this.listViewWidth = DEFAULT_LISTVIEW_WIDTH,
   })
       : assert(initialValue != null),
         assert(minValue != null),
@@ -74,6 +76,9 @@ class NumberPicker extends StatelessWidget {
 
   ///called when selected value changes
   final ValueChanged<num> onChanged;
+
+  ///forcing the onChanged call even if the new value is the same as the initial one
+  final bool forceOnChanged;
 
   ///min value user can pick
   final int minValue;
@@ -241,7 +246,7 @@ class NumberPicker extends StatelessWidget {
       }
 
       //update selection
-      if (intValueInTheMiddle != selectedIntValue) {
+      if ((intValueInTheMiddle != selectedIntValue) || forceOnChanged) {
         num newValue;
         if (decimalPlaces == 0) {
           //return integer value
@@ -277,8 +282,9 @@ class NumberPicker extends StatelessWidget {
       }
 
       //update selection
-      if (selectedIntValue != maxValue &&
-          decimalValueInTheMiddle != selectedDecimalValue) {
+      if ((selectedIntValue != maxValue &&
+              decimalValueInTheMiddle != selectedDecimalValue) ||
+          forceOnChanged) {
         double decimalPart = _toDecimal(decimalValueInTheMiddle);
         double newValue = ((selectedIntValue + decimalPart).toDouble());
         onChanged(newValue);
@@ -335,6 +341,7 @@ class NumberPickerDialog extends StatefulWidget {
   final int initialIntegerValue;
   final double initialDoubleValue;
   final int decimalPlaces;
+  final bool forceOnChanged;
   final Widget title;
   final EdgeInsets titlePadding;
   final Widget confirmWidget;
@@ -345,6 +352,7 @@ class NumberPickerDialog extends StatefulWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.initialIntegerValue,
+    this.forceOnChanged = false,
     this.title,
     this.titlePadding,
     Widget confirmWidget,
@@ -360,6 +368,7 @@ class NumberPickerDialog extends StatefulWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.initialDoubleValue,
+    this.forceOnChanged = false,
     this.decimalPlaces = 1,
     this.title,
     this.titlePadding,
@@ -398,13 +407,16 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
           minValue: widget.minValue,
           maxValue: widget.maxValue,
           decimalPlaces: widget.decimalPlaces,
-          onChanged: _handleValueChanged);
+          onChanged: _handleValueChanged,
+          forceOnChanged: widget.forceOnChanged,
+        );
     } else {
       return new NumberPicker.integer(
         initialValue: selectedIntValue,
         minValue: widget.minValue,
         maxValue: widget.maxValue,
         onChanged: _handleValueChanged,
+        forceOnChanged: widget.forceOnChanged,
       );
     }
   }
