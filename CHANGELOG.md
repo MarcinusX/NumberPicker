@@ -1,3 +1,6 @@
+## [0.1.4]
+* Solved normalizing decimal places bug
+
 ## [0.1.3]
 
 * Fixed issue with small integer ranges
