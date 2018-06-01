@@ -100,3 +100,10 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 ```
 
+### Prevent repaint but get notified of all changes
+
+The nominal implementation requires to repaint the *NumberPicker* each time a change happens to refresh the *current value* "highlight", via a *setState()* call.
+
+If you do not want this extra repaint but still receive an *OnChanged* call for all changes, including when the new value corresponds to the initial one,
+set the *forceOnChanged* to true (default: false).
+
