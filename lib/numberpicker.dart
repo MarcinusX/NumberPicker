@@ -23,7 +23,9 @@ class NumberPicker extends StatelessWidget {
     @required this.onChanged,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
     this.listViewWidth = DEFUALT_LISTVIEW_WIDTH,
-  })  : assert(initialValue != null),
+    this.step = 1,
+  })
+      : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
         assert(maxValue > minValue),
@@ -48,7 +50,8 @@ class NumberPicker extends StatelessWidget {
     this.decimalPlaces = 1,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
     this.listViewWidth = DEFUALT_LISTVIEW_WIDTH,
-  })  : assert(initialValue != null),
+  })
+      : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
         assert(decimalPlaces != null && decimalPlaces > 0),
@@ -68,6 +71,7 @@ class NumberPicker extends StatelessWidget {
               itemExtent,
         ),
         _listViewHeight = 3 * itemExtent,
+        step = 1,
         super(key: key);
 
   ///called when selected value changes
@@ -104,12 +108,20 @@ class NumberPicker extends StatelessWidget {
   ///Currently selected decimal value
   final int selectedDecimalValue;
 
+  ///Step between elements. Only for integer datePicker
+  ///Examples:
+  /// if step is 100 the following elements may be 100, 200, 300...
+  /// if min=0, max=6, step=4, then items will be 0, 3 and 6
+  /// if min=0, max=5, step=3, then items will be 0 and 3.
+  final int step;
+
   //
   //----------------------------- PUBLIC ------------------------------
   //
 
   animateInt(int valueToSelect) {
-    _animate(intScrollController, (valueToSelect - minValue) * itemExtent);
+    int index = valueToSelect ~/ step;
+    _animate(intScrollController, (index - minValue) * itemExtent);
   }
 
   animateDecimal(int decimalValue) {
@@ -150,7 +162,7 @@ class NumberPicker extends StatelessWidget {
     TextStyle selectedStyle =
         themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
-    int itemCount = maxValue - minValue + 3;
+    int itemCount = (maxValue - minValue) ~/ step + 3;
 
     return new NotificationListener(
       child: new Container(
@@ -162,7 +174,7 @@ class NumberPicker extends StatelessWidget {
           itemCount: itemCount,
           cacheExtent: _calculateCacheExtent(itemCount),
           itemBuilder: (BuildContext context, int index) {
-            final int value = minValue + index - 1;
+            final int value = _intValueFromIndex(index);
 
             //define special style for selected (middle) element
             final TextStyle itemStyle =
@@ -225,12 +237,14 @@ class NumberPicker extends StatelessWidget {
   // ----------------------------- LOGIC -----------------------------
   //
 
+  int _intValueFromIndex(int index) => minValue + (index - 1) * step;
+
   bool _onIntegerNotification(Notification notification) {
     if (notification is ScrollNotification) {
       //calculate
       int intIndexOfMiddleElement =
           (notification.metrics.pixels + _listViewHeight / 2) ~/ itemExtent;
-      int intValueInTheMiddle = minValue + intIndexOfMiddleElement - 1;
+      int intValueInTheMiddle = _intValueFromIndex(intIndexOfMiddleElement);
       intValueInTheMiddle = _normalizeIntegerMiddleValue(intValueInTheMiddle);
 
       if (_userStoppedScrolling(notification, intScrollController)) {
@@ -305,7 +319,9 @@ class NumberPicker extends StatelessWidget {
   }
 
   int _normalizeIntegerMiddleValue(int integerValueInTheMiddle) {
-    return _normalizeMiddleValue(integerValueInTheMiddle, minValue, maxValue);
+    //make sure that max is a multiple of step
+    int max = (maxValue ~/ step) * step;
+    return _normalizeMiddleValue(integerValueInTheMiddle, minValue, max);
   }
 
   int _normalizeDecimalMiddleValue(int decimalValueInTheMiddle) {
