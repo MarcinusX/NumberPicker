@@ -30,6 +30,7 @@ class NumberPicker extends StatelessWidget {
         assert(maxValue != null),
         assert(maxValue > minValue),
         assert(initialValue >= minValue && initialValue <= maxValue),
+        assert(step > 0),
         selectedIntValue = initialValue,
         selectedDecimalValue = -1,
         decimalPlaces = 0,
