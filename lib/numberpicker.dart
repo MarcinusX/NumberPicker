@@ -35,7 +35,7 @@ class NumberPicker extends StatelessWidget {
         selectedDecimalValue = -1,
         decimalPlaces = 0,
         intScrollController = new ScrollController(
-          initialScrollOffset: (initialValue - minValue) * itemExtent,
+          initialScrollOffset: (initialValue - minValue) ~/ step * itemExtent,
         ),
         decimalScrollController = null,
         _listViewHeight = 3 * itemExtent,
