@@ -102,6 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
         return new NumberPickerDialog.integer(
           minValue: 0,
           maxValue: 100,
+          step: 10,
           initialIntegerValue: _currentIntValue,
         );
       },

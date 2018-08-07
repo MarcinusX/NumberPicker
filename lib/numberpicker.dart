@@ -364,6 +364,7 @@ class NumberPickerDialog extends StatefulWidget {
   final EdgeInsets titlePadding;
   final Widget confirmWidget;
   final Widget cancelWidget;
+  final int step;
 
   ///constructor for integer values
   NumberPickerDialog.integer({
@@ -372,6 +373,7 @@ class NumberPickerDialog extends StatefulWidget {
     @required this.initialIntegerValue,
     this.title,
     this.titlePadding,
+    this.step = 1,
     Widget confirmWidget,
     Widget cancelWidget,
   })
@@ -393,7 +395,8 @@ class NumberPickerDialog extends StatefulWidget {
   })
       : confirmWidget = confirmWidget ?? new Text("OK"),
         cancelWidget = cancelWidget ?? new Text("CANCEL"),
-        initialIntegerValue = -1;
+        initialIntegerValue = -1,
+        step = 1;
 
   @override
   State<NumberPickerDialog> createState() =>
@@ -429,6 +432,7 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
         initialValue: selectedIntValue,
         minValue: widget.minValue,
         maxValue: widget.maxValue,
+        step: widget.step,
         onChanged: _handleValueChanged,
       );
     }
