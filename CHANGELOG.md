@@ -1,3 +1,6 @@
+## [0.1.5]
+* Added `step` paramater for integer picker
+
 ## [0.1.4]
 * Solved normalizing decimal places bug
 
