@@ -1,11 +1,11 @@
 name: numberpicker
-version: 0.1.5
+version: 0.1.6
 description: NumberPicker is a widget allowing user to choose numbers by scrolling spinners.
 author: Marcin Szalek <marcinszalek1@gmail.com>
 homepage: https://github.com/MarcinusX/NumberPicker
 
 environment:
-  sdk: ">=1.23.0 <2.0.0"
+  sdk: ">=2.0.0-dev.58.0 <3.0.0"
 
 dependencies:
   flutter:

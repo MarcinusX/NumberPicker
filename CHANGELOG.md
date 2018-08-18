@@ -1,3 +1,6 @@
+## [0.1.6]
+* Updated environment sdk dependency
+
 ## [0.1.5]
 * Added `step` paramater for integer picker
 
