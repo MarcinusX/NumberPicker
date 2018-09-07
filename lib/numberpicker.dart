@@ -112,7 +112,7 @@ class NumberPicker extends StatelessWidget {
   ///Step between elements. Only for integer datePicker
   ///Examples:
   /// if step is 100 the following elements may be 100, 200, 300...
-  /// if min=0, max=6, step=4, then items will be 0, 3 and 6
+  /// if min=0, max=6, step=3, then items will be 0, 3 and 6
   /// if min=0, max=5, step=3, then items will be 0 and 3.
   final int step;
 
@@ -121,8 +121,9 @@ class NumberPicker extends StatelessWidget {
   //
 
   animateInt(int valueToSelect) {
-    int index = valueToSelect ~/ step;
-    _animate(intScrollController, (index - minValue) * itemExtent);
+    int diff = valueToSelect - minValue;
+    int index = diff ~/ step;
+    _animate(intScrollController, index * itemExtent);
   }
 
   animateDecimal(int decimalValue) {
