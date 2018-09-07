@@ -44,27 +44,79 @@ void main() {
         scrollBy: -10,
         expectedValue: 1);
   });
+
+  testWidgets('Step works', (WidgetTester tester) async {
+    await _testNumberPicker(
+        tester: tester,
+        minValue: 0,
+        maxValue: 6,
+        step: 3,
+        initialValue: 0,
+        scrollBy: 2,
+        expectedValue: 6);
+  });
+
+  testWidgets('Step cuts max value', (WidgetTester tester) async {
+    await _testNumberPicker(
+        tester: tester,
+        minValue: 0,
+        maxValue: 5,
+        step: 3,
+        initialValue: 0,
+        scrollBy: 3,
+        expectedValue: 3);
+  });
+
+  testWidgets('Min value==step, force animate',
+      (WidgetTester tester) async {
+    await _testNumberPicker(
+        tester: tester,
+        minValue: 10,
+        maxValue: 50,
+        step: 10,
+        initialValue: 10,
+        scrollBy: 2,
+        expectedValue: 30,
+        animateToItself: true);
+  });
+
+  testWidgets('Force animate works',
+          (WidgetTester tester) async {
+        await _testNumberPicker(
+            tester: tester,
+            minValue: 10,
+            maxValue: 50,
+            initialValue: 10,
+            scrollBy: 13,
+            expectedValue: 23,
+            animateToItself: true);
+      });
 }
 
-_testNumberPicker(
+Future<NumberPicker> _testNumberPicker(
     {WidgetTester tester,
     int minValue,
     int maxValue,
     int initialValue,
     int scrollBy,
-    int expectedValue}) async {
+    int step = 1,
+    int expectedValue,
+    bool animateToItself = false}) async {
   int value = initialValue;
+  NumberPicker picker;
 
   await tester.pumpWidget(
     StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+      picker = NumberPicker.integer(
+        initialValue: value,
+        minValue: minValue,
+        maxValue: maxValue,
+        step: step,
+        onChanged: (newValue) => setState(() => value = newValue),
+      );
       return MaterialApp(
         home: Scaffold(
-          body: NumberPicker.integer(
-            initialValue: value,
-            minValue: minValue,
-            maxValue: maxValue,
-            onChanged: (newValue) => setState(() => value = newValue),
-          ),
+          body: picker,
         ),
       );
     }),
@@ -72,8 +124,17 @@ _testNumberPicker(
   expect(value, equals(initialValue));
 
   await _scrollNumberPicker(Offset(0.0, 0.0), tester, scrollBy);
+  await tester.pumpAndSettle();
 
   expect(value, equals(expectedValue));
+
+  if (animateToItself) {
+    expect(picker.selectedIntValue, equals(expectedValue));
+    await picker.animateInt(picker.selectedIntValue);
+    await tester.pumpAndSettle();
+    expect(picker.selectedIntValue, equals(expectedValue));
+  }
+  return picker;
 }
 
 _scrollNumberPicker(

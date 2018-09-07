@@ -1,3 +1,6 @@
+## [0.1.7]
+* Fixed step bug
+
 ## [0.1.6]
 * Updated environment sdk dependency
 
