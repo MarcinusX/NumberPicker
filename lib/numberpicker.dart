@@ -12,7 +12,7 @@ class NumberPicker extends StatelessWidget {
   static const double DEFAULT_ITEM_EXTENT = 50.0;
 
   ///width of list view
-  static const double DEFUALT_LISTVIEW_WIDTH = 100.0;
+  static const double DEFAULT_LISTVIEW_WIDTH = 100.0;
 
   ///constructor for integer number picker
   NumberPicker.integer({
@@ -22,7 +22,7 @@ class NumberPicker extends StatelessWidget {
     @required this.maxValue,
     @required this.onChanged,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
-    this.listViewWidth = DEFUALT_LISTVIEW_WIDTH,
+    this.listViewWidth = DEFAULT_LISTVIEW_WIDTH,
     this.step = 1,
   })
       : assert(initialValue != null),
@@ -50,7 +50,7 @@ class NumberPicker extends StatelessWidget {
     @required this.onChanged,
     this.decimalPlaces = 1,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
-    this.listViewWidth = DEFUALT_LISTVIEW_WIDTH,
+    this.listViewWidth = DEFAULT_LISTVIEW_WIDTH,
   })
       : assert(initialValue != null),
         assert(minValue != null),
