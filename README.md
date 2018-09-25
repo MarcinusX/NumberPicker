@@ -1,4 +1,4 @@
-# NumberPicker [![Build Status](https://travis-ci.org/MarcinusX/NumberPicker.svg?branch=master)](https://travis-ci.org/MarcinusX/NumberPicker) [![Coverage Status](https://coveralls.io/repos/github/MarcinusX/NumberPicker/badge.svg?branch=CI)](https://coveralls.io/github/MarcinusX/NumberPicker?branch=CI)
+# NumberPicker [![Build Status](https://travis-ci.org/MarcinusX/NumberPicker.svg?branch=master)](https://travis-ci.org/MarcinusX/NumberPicker) [![Coverage Status](https://coveralls.io/repos/github/MarcinusX/NumberPicker/badge.svg?branch=master)](https://coveralls.io/github/MarcinusX/NumberPicker?branch=CI)
 
 NumberPicker is a custom widget designed for choosing an integer or decimal number by scrolling spinners.
 
