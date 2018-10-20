@@ -35,6 +35,19 @@ class _MyHomePageState extends State<MyHomePage> {
   NumberPicker integerNumberPicker;
   NumberPicker decimalNumberPicker;
 
+  Decoration _decoration = new BoxDecoration(
+    border: new Border(
+      top: new BorderSide(
+        style: BorderStyle.solid,
+        color: Colors.black26,
+      ),
+      bottom: new BorderSide(
+        style: BorderStyle.solid,
+        color: Colors.black26,
+      ),
+    ),
+  );
+
   _handleValueChanged(num value) {
     if (value != null) {
       if (value is int) {
@@ -71,6 +84,8 @@ class _MyHomePageState extends State<MyHomePage> {
         minValue: 1,
         maxValue: 5,
         decimalPlaces: 2,
+        highlightSelectedValue: false,
+        decoration: _decoration,
         onChanged: _handleValueChanged);
     return new Scaffold(
         appBar: new AppBar(
@@ -104,6 +119,8 @@ class _MyHomePageState extends State<MyHomePage> {
           maxValue: 100,
           step: 10,
           initialIntegerValue: _currentIntValue,
+          highlightSelectedValue: false,
+          decoration: _decoration,
         );
       },
     ).then(_handleValueChangedExternally);
