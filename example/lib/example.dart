@@ -64,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
       minValue: 0,
       maxValue: 100,
       step: 10,
+      infiniteLoop: true,
       onChanged: _handleValueChanged,
     );
     decimalNumberPicker = new NumberPicker.decimal(
