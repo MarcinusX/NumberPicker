@@ -49,15 +49,11 @@ Future<NumberPicker> _testNumberPicker(
 
   await _scrollNumberPicker(Offset(0.0, 0.0), tester, scrollByInt, true);
   await tester.pumpAndSettle();
-  print(picker.selectedIntValue);
-  print(picker.selectedDecimalValue);
 
 
 
   await _scrollNumberPicker(Offset(0.0, 0.0), tester, scrollByDecimal, false);
   await tester.pumpAndSettle();
-  print(picker.selectedIntValue);
-  print(picker.selectedDecimalValue);
   expect(value, equals(expectedValue));
 
   if (animateToItself) {

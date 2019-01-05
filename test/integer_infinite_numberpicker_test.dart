@@ -23,26 +23,24 @@ void main() {
         expectedValue: 3);
   });
 
-  testWidgets('Integer overscroll up to max value',
-      (WidgetTester tester) async {
+  testWidgets('Integer overscroll over max value', (WidgetTester tester) async {
     await _testNumberPicker(
         tester: tester,
         minValue: 1,
         maxValue: 5,
-        initialValue: 3,
-        scrollBy: 10,
-        expectedValue: 5);
+        initialValue: 5,
+        scrollBy: 1,
+        expectedValue: 1);
   });
 
-  testWidgets('Integer overscroll down to min value',
-      (WidgetTester tester) async {
+  testWidgets('Integer overscroll under min value', (WidgetTester tester) async {
     await _testNumberPicker(
         tester: tester,
         minValue: 1,
         maxValue: 5,
-        initialValue: 3,
-        scrollBy: -10,
-        expectedValue: 1);
+        initialValue: 1,
+        scrollBy: -1,
+        expectedValue: 5);
   });
 
   testWidgets('Step works', (WidgetTester tester) async {
@@ -63,8 +61,8 @@ void main() {
         maxValue: 5,
         step: 3,
         initialValue: 0,
-        scrollBy: 3,
-        expectedValue: 3);
+        scrollBy: 2,
+        expectedValue: 0);
   });
 
   testWidgets('Min value==step, force animate', (WidgetTester tester) async {
@@ -110,6 +108,7 @@ Future<NumberPicker> _testNumberPicker(
         minValue: minValue,
         maxValue: maxValue,
         step: step,
+        infiniteLoop: true,
         onChanged: (newValue) => setState(() => value = newValue),
       );
       return MaterialApp(

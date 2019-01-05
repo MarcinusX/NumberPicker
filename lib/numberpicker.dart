@@ -124,6 +124,9 @@ class NumberPicker extends StatelessWidget {
   ///Repeat values infinitely
   final bool infiniteLoop;
 
+  ///Amount of items
+  int itemCount;
+
   //
   //----------------------------- PUBLIC ------------------------------
   //
@@ -179,7 +182,8 @@ class NumberPicker extends StatelessWidget {
     TextStyle selectedStyle =
     themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
-    int itemCount = (maxValue - minValue) ~/ step + 3;
+    itemCount = (maxValue - minValue) ~/ step + 1;
+    var listItemCount = itemCount + 2;
 
     return new NotificationListener(
       child: new Container(
@@ -188,8 +192,8 @@ class NumberPicker extends StatelessWidget {
         child: new ListView.builder(
           controller: intScrollController,
           itemExtent: itemExtent,
-          itemCount: itemCount,
-          cacheExtent: _calculateCacheExtent(itemCount),
+          itemCount: listItemCount,
+          cacheExtent: _calculateCacheExtent(listItemCount),
           itemBuilder: (BuildContext context, int index) {
             final int value = _intValueFromIndex(index);
 
@@ -197,7 +201,7 @@ class NumberPicker extends StatelessWidget {
             final TextStyle itemStyle =
             value == selectedIntValue ? selectedStyle : defaultStyle;
 
-            bool isExtra = index == 0 || index == itemCount - 1;
+            bool isExtra = index == 0 || index == listItemCount - 1;
 
             return isExtra
                 ? new Container() //empty first and last element
@@ -216,8 +220,9 @@ class NumberPicker extends StatelessWidget {
     TextStyle selectedStyle =
     themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
-    int itemCount =
-    selectedIntValue == maxValue ? 3 : math.pow(10, decimalPlaces) + 2;
+    int itemCount = selectedIntValue == maxValue
+        ? 3
+        : math.pow(10, decimalPlaces) + 2;
 
     return new NotificationListener(
       child: new Container(
@@ -255,6 +260,8 @@ class NumberPicker extends StatelessWidget {
     TextStyle selectedStyle =
     themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
+    itemCount = (maxValue - minValue) ~/ step + 1;
+
     return new NotificationListener(
       child: new Container(
         height: _listViewHeight,
@@ -284,11 +291,9 @@ class NumberPicker extends StatelessWidget {
   //
 
   int _intValueFromIndex(int index) {
-    var value = minValue + (index - 1) * step;
-
-    if (infiniteLoop) value %= (maxValue - minValue);
-
-    return value;
+    index--;
+    index %= itemCount;
+    return minValue + index * step;
   }
 
   bool _onIntegerNotification(Notification notification) {
