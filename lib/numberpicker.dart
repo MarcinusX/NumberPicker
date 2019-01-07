@@ -43,6 +43,7 @@ class NumberPicker extends StatelessWidget {
           initialScrollOffset: (initialValue - minValue) ~/ step * itemExtent,),
         decimalScrollController = null,
         _listViewHeight = 3 * itemExtent,
+        integerItemCount = (maxValue - minValue) ~/ step + 1,
         super(key: key);
 
   ///constructor for decimal number picker
@@ -77,6 +78,7 @@ class NumberPicker extends StatelessWidget {
         ),
         _listViewHeight = 3 * itemExtent,
         step = 1,
+        integerItemCount = maxValue.floor() - minValue.floor() + 1,
         infiniteLoop = false,
         super(key: key);
 
@@ -125,7 +127,7 @@ class NumberPicker extends StatelessWidget {
   final bool infiniteLoop;
 
   ///Amount of items
-  int itemCount;
+  final int integerItemCount;
 
   //
   //----------------------------- PUBLIC ------------------------------
@@ -182,8 +184,7 @@ class NumberPicker extends StatelessWidget {
     TextStyle selectedStyle =
     themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
-    itemCount = (maxValue - minValue) ~/ step + 1;
-    var listItemCount = itemCount + 2;
+    var listItemCount = integerItemCount + 2;
 
     return new NotificationListener(
       child: new Container(
@@ -220,7 +221,7 @@ class NumberPicker extends StatelessWidget {
     TextStyle selectedStyle =
     themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
-    int itemCount = selectedIntValue == maxValue
+    int decimalItemCount = selectedIntValue == maxValue
         ? 3
         : math.pow(10, decimalPlaces) + 2;
 
@@ -231,7 +232,7 @@ class NumberPicker extends StatelessWidget {
         child: new ListView.builder(
           controller: decimalScrollController,
           itemExtent: itemExtent,
-          itemCount: itemCount,
+          itemCount: decimalItemCount,
           itemBuilder: (BuildContext context, int index) {
             final int value = index - 1;
 
@@ -239,7 +240,7 @@ class NumberPicker extends StatelessWidget {
             final TextStyle itemStyle =
             value == selectedDecimalValue ? selectedStyle : defaultStyle;
 
-            bool isExtra = index == 0 || index == itemCount - 1;
+            bool isExtra = index == 0 || index == decimalItemCount - 1;
 
             return isExtra
                 ? new Container() //empty first and last element
@@ -259,8 +260,6 @@ class NumberPicker extends StatelessWidget {
     TextStyle defaultStyle = themeData.textTheme.body1;
     TextStyle selectedStyle =
     themeData.textTheme.headline.copyWith(color: themeData.accentColor);
-
-    itemCount = (maxValue - minValue) ~/ step + 1;
 
     return new NotificationListener(
       child: new Container(
@@ -292,7 +291,7 @@ class NumberPicker extends StatelessWidget {
 
   int _intValueFromIndex(int index) {
     index--;
-    index %= itemCount;
+    index %= integerItemCount;
     return minValue + index * step;
   }
 
