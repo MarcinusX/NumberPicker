@@ -15,6 +15,34 @@ class NumberPicker extends StatelessWidget {
   static const double DEFAULT_LISTVIEW_WIDTH = 100.0;
 
   ///constructor for integer number picker
+  NumberPicker.horizontal({
+    Key key,
+    @required int initialValue,
+    @required this.minValue,
+    @required this.maxValue,
+    @required this.onChanged,
+    this.itemExtent = DEFAULT_ITEM_EXTENT,
+    this.listViewWidth = DEFAULT_LISTVIEW_WIDTH + 50,
+    this.step = 1,
+    this.scrollDirection = Axis.horizontal
+  })
+      : assert(initialValue != null),
+        assert(minValue != null),
+        assert(maxValue != null),
+        assert(maxValue > minValue),
+        assert(initialValue >= minValue && initialValue <= maxValue),
+        assert(step > 0),
+        selectedIntValue = initialValue,
+        selectedDecimalValue = -1,
+        decimalPlaces = 0,
+        intScrollController = new ScrollController(
+          initialScrollOffset: (initialValue - minValue) ~/ step * itemExtent,
+        ),
+        decimalScrollController = null,
+        _listViewHeight = 3 * itemExtent,
+        super(key: key);
+
+  ///constructor for integer number picker
   NumberPicker.integer({
     Key key,
     @required int initialValue,
@@ -24,6 +52,7 @@ class NumberPicker extends StatelessWidget {
     this.itemExtent = DEFAULT_ITEM_EXTENT,
     this.listViewWidth = DEFAULT_LISTVIEW_WIDTH,
     this.step = 1,
+    this.scrollDirection = Axis.vertical
   })
       : assert(initialValue != null),
         assert(minValue != null),
@@ -51,6 +80,7 @@ class NumberPicker extends StatelessWidget {
     this.decimalPlaces = 1,
     this.itemExtent = DEFAULT_ITEM_EXTENT,
     this.listViewWidth = DEFAULT_LISTVIEW_WIDTH,
+    this.scrollDirection = Axis.vertical
   })
       : assert(initialValue != null),
         assert(minValue != null),
@@ -116,6 +146,8 @@ class NumberPicker extends StatelessWidget {
   /// if min=0, max=5, step=3, then items will be 0 and 3.
   final int step;
 
+  final Axis scrollDirection;
+
   //
   //----------------------------- PUBLIC ------------------------------
   //
@@ -171,6 +203,7 @@ class NumberPicker extends StatelessWidget {
         height: _listViewHeight,
         width: listViewWidth,
         child: new ListView.builder(
+          scrollDirection: scrollDirection,
           controller: intScrollController,
           itemExtent: itemExtent,
           itemCount: itemCount,

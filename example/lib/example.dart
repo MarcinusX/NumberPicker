@@ -59,7 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    integerNumberPicker = new NumberPicker.integer(
+    integerNumberPicker = new NumberPicker.horizontal(
       initialValue: _currentIntValue,
       minValue: 0,
       maxValue: 100,
