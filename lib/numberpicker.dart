@@ -300,6 +300,10 @@ class NumberPicker extends StatelessWidget {
       //calculate
       int intIndexOfMiddleElement = (notification.metrics.pixels / itemExtent)
           .round();
+      if (!infiniteLoop) {
+        intIndexOfMiddleElement =
+            intIndexOfMiddleElement.clamp(0, integerItemCount - 1);
+      }
       int intValueInTheMiddle = _intValueFromIndex(intIndexOfMiddleElement + 1);
       intValueInTheMiddle = _normalizeIntegerMiddleValue(intValueInTheMiddle);
 
