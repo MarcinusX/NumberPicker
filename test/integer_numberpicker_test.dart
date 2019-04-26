@@ -89,6 +89,17 @@ void main() {
         expectedValue: 23,
         animateToItself: true);
   });
+
+  testWidgets('Zero pad works', (WidgetTester tester) async {
+    await _testNumberPicker(
+        tester: tester,
+        minValue: 8,
+        maxValue: 10,
+        initialValue: 8,
+        zeroPadding: 2,
+        scrollBy: 1,
+        expectedDisplayValues: ["08", "09", "10"]);
+  });
 }
 
 Future<NumberPicker> _testNumberPicker(
@@ -99,6 +110,8 @@ Future<NumberPicker> _testNumberPicker(
     int scrollBy,
     int step = 1,
     int expectedValue,
+    int zeroPadding = 1,
+    List<String> expectedDisplayValues,
     bool animateToItself = false}) async {
   int value = initialValue;
   NumberPicker picker;
@@ -110,6 +123,7 @@ Future<NumberPicker> _testNumberPicker(
         minValue: minValue,
         maxValue: maxValue,
         step: step,
+        zeroPadding: zeroPadding,
         onChanged: (newValue) => setState(() => value = newValue),
       );
       return MaterialApp(
@@ -124,14 +138,23 @@ Future<NumberPicker> _testNumberPicker(
   await _scrollNumberPicker(Offset(0.0, 0.0), tester, scrollBy);
   await tester.pumpAndSettle();
 
-  expect(value, equals(expectedValue));
+  if(expectedValue != null) {
+    expect(value, equals(expectedValue));
 
-  if (animateToItself) {
-    expect(picker.selectedIntValue, equals(expectedValue));
-    await picker.animateInt(picker.selectedIntValue);
-    await tester.pumpAndSettle();
-    expect(picker.selectedIntValue, equals(expectedValue));
+    if (animateToItself) {
+      expect(picker.selectedIntValue, equals(expectedValue));
+      await picker.animateInt(picker.selectedIntValue);
+      await tester.pumpAndSettle();
+      expect(picker.selectedIntValue, equals(expectedValue));
+    }
   }
+
+  if(expectedDisplayValues != null) {
+    for (String displayValue in expectedDisplayValues) {
+      expect(find.text(displayValue), findsOneWidget);
+    }
+  }
+
   return picker;
 }
 
