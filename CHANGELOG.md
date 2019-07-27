@@ -1,3 +1,6 @@
+## [1.0.0]
+* Added infinite loop option
+
 ## [0.1.7]
 * Fixed step bug
 
