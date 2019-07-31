@@ -69,10 +69,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Divider(color: Colors.grey, height: 32),
                 Text('Horizontal', style: Theme.of(context).textTheme.title),
                 horizontalNumberPicker,
-                new RaisedButton(
-                  onPressed: () => _showHorizontalIntDialog(),
-                  child: new Text(
-                    "Current int value: $_currentHorizontalIntValue",
+                Text(
+                  "Current int value: $_currentHorizontalIntValue",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
@@ -150,27 +150,6 @@ class _MyHomePageState extends State<MyHomePage> {
         integerNumberPicker.animateInt(value);
       }
     });
-  }
-
-  Future _showHorizontalIntDialog() async {
-    await showDialog<int>(
-      context: context,
-      builder: (BuildContext context) {
-        return new NumberPickerDialog.integer(
-          minValue: 0,
-          maxValue: 100,
-          step: 10,
-          initialIntegerValue: _currentHorizontalIntValue,
-        );
-      },
-    ).then(
-      (num value) {
-        if (value != null) {
-          setState(() => _currentHorizontalIntValue = value);
-          horizontalNumberPicker.animateInt(value);
-        }
-      },
-    );
   }
 
   Future _showInfIntDialog() async {
