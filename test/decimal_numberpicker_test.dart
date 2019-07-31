@@ -69,7 +69,7 @@ _scrollNumberPicker(Offset pickerPosition, WidgetTester tester, int scrollBy,
     bool integer) async {
   Offset pickerCenter = Offset(
     pickerPosition.dx + (integer ? 300.0 : 400.0),
-    pickerPosition.dy + 1.5 * NumberPicker.DEFAULT_ITEM_EXTENT,
+    pickerPosition.dy + 1.5 * NumberPicker.kDefaultItemExtent,
   );
   final TestGesture testGesture = await tester.startGesture(pickerCenter);
   await testGesture.moveBy(Offset(
