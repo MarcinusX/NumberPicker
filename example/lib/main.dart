@@ -205,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ).then((num value) {
       if (value != null) {
         setState(() => _currentDoubleValue = value);
-        decimalNumberPicker.animateInt(value);
+        decimalNumberPicker.animateDecimalAndInteger(value);
       }
     });
   }

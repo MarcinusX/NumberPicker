@@ -275,14 +275,10 @@ class NumberPicker extends StatelessWidget {
                       );
               },
             ),
-            new Center(
-              child: new IgnorePointer(
-                child: new Container(
-                  width: double.infinity,
-                  height: itemExtent,
-                  decoration: decoration,
-                ),
-              ),
+            _NumberPickerSelectedItemDecoration(
+              axis: scrollDirection,
+              itemExtent: itemExtent,
+              decoration: decoration,
             ),
           ],
         ),
@@ -329,14 +325,10 @@ class NumberPicker extends StatelessWidget {
                       );
               },
             ),
-            new Center(
-              child: new IgnorePointer(
-                child: new Container(
-                  width: double.infinity,
-                  height: itemExtent,
-                  decoration: decoration,
-                ),
-              ),
+            _NumberPickerSelectedItemDecoration(
+              axis: scrollDirection,
+              itemExtent: itemExtent,
+              decoration: decoration,
             ),
           ],
         ),
@@ -512,6 +504,34 @@ class NumberPicker extends StatelessWidget {
     scrollController.animateTo(value,
         duration: new Duration(seconds: 1), curve: new ElasticOutCurve());
   }
+}
+
+class _NumberPickerSelectedItemDecoration extends StatelessWidget {
+  final Axis axis;
+  final double itemExtent;
+  final Decoration decoration;
+
+  const _NumberPickerSelectedItemDecoration(
+      {Key key,
+      @required this.axis,
+      @required this.itemExtent,
+      @required this.decoration})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Center(
+      child: new IgnorePointer(
+        child: new Container(
+          width: isVertical ? double.infinity : itemExtent,
+          height: isVertical ? itemExtent : double.infinity,
+          decoration: decoration,
+        ),
+      ),
+    );
+  }
+
+  bool get isVertical => axis == Axis.vertical;
 }
 
 ///Returns AlertDialog as a Widget so it is designed to be used in showDialog method
