@@ -160,12 +160,12 @@ Future<NumberPicker> _testNumberPicker(
 _scrollNumberPicker(
     Offset pickerPosition, WidgetTester tester, int scrollBy) async {
   Offset pickerCenter = Offset(
-    pickerPosition.dx + NumberPicker.DEFAULT_LISTVIEW_WIDTH / 2,
-    pickerPosition.dy + 1.5 * NumberPicker.DEFAULT_ITEM_EXTENT,
+    pickerPosition.dx + NumberPicker.kDefaultListViewCrossAxisSize / 2,
+    pickerPosition.dy + 1.5 * NumberPicker.kDefaultItemExtent,
   );
   final TestGesture testGesture = await tester.startGesture(pickerCenter);
   await testGesture.moveBy(Offset(
     0.0,
-    -scrollBy * NumberPicker.DEFAULT_ITEM_EXTENT,
+    -scrollBy * NumberPicker.kDefaultItemExtent,
   ));
 }
