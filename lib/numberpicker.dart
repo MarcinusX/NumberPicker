@@ -27,6 +27,7 @@ class NumberPicker extends StatelessWidget {
     this.itemExtent = kDefaultItemExtent,
     this.listViewHeight = kDefaultListViewCrossAxisSize,
     this.step = 1,
+    this.zeroPad = false,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -58,6 +59,7 @@ class NumberPicker extends StatelessWidget {
     this.step = 1,
     this.scrollDirection = Axis.vertical,
     this.infiniteLoop = false,
+    this.zeroPad = false,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -116,6 +118,7 @@ class NumberPicker extends StatelessWidget {
         scrollDirection = Axis.vertical,
         integerItemCount = maxValue.floor() - minValue.floor() + 1,
         infiniteLoop = false,
+        zeroPad = false,
         super(key: key);
 
   ///called when selected value changes
@@ -163,6 +166,9 @@ class NumberPicker extends StatelessWidget {
 
   ///Repeat values infinitely
   final bool infiniteLoop;
+
+  ///Pads displayed integer values up to the length of maxValue
+  final bool zeroPad;
 
   ///Amount of items
   final int integerItemCount;
@@ -246,7 +252,10 @@ class NumberPicker extends StatelessWidget {
             return isExtra
                 ? new Container() //empty first and last element
                 : new Center(
-                    child: new Text(value.toString(), style: itemStyle),
+                    child: new Text(
+                      getDisplayedValue(value),
+                      style: itemStyle,
+                    ),
                   );
           },
         ),
@@ -314,13 +323,22 @@ class NumberPicker extends StatelessWidget {
                 value == selectedIntValue ? selectedStyle : defaultStyle;
 
             return new Center(
-              child: new Text(value.toString(), style: itemStyle),
+              child: new Text(
+                getDisplayedValue(value),
+                style: itemStyle,
+              ),
             );
           },
         ),
       ),
       onNotification: _onIntegerNotification,
     );
+  }
+
+  String getDisplayedValue(int value) {
+    return zeroPad
+        ? value.toString().padLeft(maxValue.toString().length, '0')
+        : value.toString();
   }
 
   //
@@ -465,6 +483,7 @@ class NumberPickerDialog extends StatefulWidget {
   final Widget cancelWidget;
   final int step;
   final bool infiniteLoop;
+  final bool zeroPad;
 
   ///constructor for integer values
   NumberPickerDialog.integer({
@@ -475,6 +494,7 @@ class NumberPickerDialog extends StatefulWidget {
     this.titlePadding,
     this.step = 1,
     this.infiniteLoop = false,
+    this.zeroPad = false,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? new Text("OK"),
@@ -496,7 +516,8 @@ class NumberPickerDialog extends StatefulWidget {
         cancelWidget = cancelWidget ?? new Text("CANCEL"),
         initialIntegerValue = -1,
         step = 1,
-        infiniteLoop = false;
+        infiniteLoop = false,
+        zeroPad = false;
 
   @override
   State<NumberPickerDialog> createState() =>
@@ -534,6 +555,7 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
         maxValue: widget.maxValue,
         step: widget.step,
         infiniteLoop: widget.infiniteLoop,
+        zeroPad: widget.zeroPad,
         onChanged: _handleValueChanged,
       );
     }

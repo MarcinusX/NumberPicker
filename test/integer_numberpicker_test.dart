@@ -89,4 +89,15 @@ void main() {
         expectedValue: 23,
         animateToItself: true);
   });
+
+  testWidgets('Zero pad works', (WidgetTester tester) async {
+    await testMultipleValuesInPicker(
+        tester: tester,
+        minValue: 0,
+        maxValue: 10,
+        initialValue: 2,
+        zeroPad: true,
+        scrollBy: 1,
+        expectedDisplayValues: ['02', '03', '04']);
+  });
 }
