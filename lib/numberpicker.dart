@@ -27,6 +27,7 @@ class NumberPicker extends StatelessWidget {
     this.itemExtent = kDefaultItemExtent,
     this.listViewHeight = kDefaultListViewCrossAxisSize,
     this.step = 1,
+    this.zeroPad = false,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -44,8 +45,7 @@ class NumberPicker extends StatelessWidget {
         listViewWidth = 3 * itemExtent,
         infiniteLoop = false,
         integerItemCount = (maxValue - minValue) ~/ step + 1,
-        zeroPad = false,
-      super(key: key);
+        super(key: key);
 
   ///constructor for integer number picker
   NumberPicker.integer({
@@ -60,8 +60,7 @@ class NumberPicker extends StatelessWidget {
     this.scrollDirection = Axis.vertical,
     this.infiniteLoop = false,
     this.zeroPad = false,
-  })
-      : assert(initialValue != null),
+  })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
         assert(maxValue > minValue),
@@ -250,15 +249,14 @@ class NumberPicker extends StatelessWidget {
 
             bool isExtra = index == 0 || index == listItemCount - 1;
 
-            String displayValue = zeroPad
-              ? value.toString().padLeft(maxValue.toString().length, '0')
-              : value.toString();
-
             return isExtra
                 ? new Container() //empty first and last element
                 : new Center(
-              child: new Text(displayValue, style: itemStyle),
-            );
+                    child: new Text(
+                      getDisplayedValue(value),
+                      style: itemStyle,
+                    ),
+                  );
           },
         ),
       ),
@@ -324,18 +322,23 @@ class NumberPicker extends StatelessWidget {
             final TextStyle itemStyle =
                 value == selectedIntValue ? selectedStyle : defaultStyle;
 
-            String displayValue = zeroPad
-              ? value.toString().padLeft(maxValue.toString().length, '0')
-              : value.toString();
-
             return new Center(
-              child: new Text(displayValue, style: itemStyle),
+              child: new Text(
+                getDisplayedValue(value),
+                style: itemStyle,
+              ),
             );
           },
         ),
       ),
       onNotification: _onIntegerNotification,
     );
+  }
+
+  String getDisplayedValue(int value) {
+    return zeroPad
+        ? value.toString().padLeft(maxValue.toString().length, '0')
+        : value.toString();
   }
 
   //

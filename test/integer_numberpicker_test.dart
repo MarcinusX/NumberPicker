@@ -91,7 +91,7 @@ void main() {
   });
 
   testWidgets('Zero pad works', (WidgetTester tester) async {
-    await testNumberPicker(
+    await testMultipleValuesInPicker(
         tester: tester,
         minValue: 0,
         maxValue: 10,

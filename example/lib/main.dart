@@ -114,6 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
       minValue: 0,
       maxValue: 100,
       step: 10,
+      zeroPad: true,
       onChanged: (value) => setState(() => _currentHorizontalIntValue = value),
     );
     integerInfiniteNumberPicker = new NumberPicker.integer(
