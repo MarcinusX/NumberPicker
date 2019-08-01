@@ -98,7 +98,7 @@ class NumberPicker extends StatelessWidget {
         assert(decimalPlaces != null && decimalPlaces > 0),
         assert(maxValue > minValue),
         assert(initialValue >= minValue && initialValue <= maxValue),
-        selectedIntValue = initialValue.floor(),
+         selectedIntValue = initialValue.floor(),
         selectedDecimalValue = ((initialValue - initialValue.floorToDouble()) *
                 math.pow(10, decimalPlaces))
             .round(),
