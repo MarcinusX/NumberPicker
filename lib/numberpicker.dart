@@ -9,13 +9,15 @@ import 'package:infinite_listview/infinite_listview.dart';
 
 ///NumberPicker is a widget designed to pick a number between #minValue and #maxValue
 class NumberPicker extends StatelessWidget {
-  ///height of every list element
+  ///height of every list element for normal number picker
+  ///width of every list element for horizontal number picker
   static const double kDefaultItemExtent = 50.0;
 
-  ///width of list view
+  ///width of list view for normal number picker
+  ///height of list view for horizontal number picker
   static const double kDefaultListViewCrossAxisSize = 100.0;
 
-  ///constructor for integer number picker
+  ///constructor for horizontal number picker
   NumberPicker.horizontal({
     Key key,
     @required int initialValue,
@@ -38,7 +40,7 @@ class NumberPicker extends StatelessWidget {
           initialScrollOffset: (initialValue - minValue) ~/ step * itemExtent,
         ),
         scrollDirection = Axis.horizontal,
-      decimalScrollController = null,
+        decimalScrollController = null,
         listViewWidth = 3 * itemExtent,
         infiniteLoop = false,
         integerItemCount = (maxValue - minValue) ~/ step + 1,
@@ -81,23 +83,21 @@ class NumberPicker extends StatelessWidget {
         super(key: key);
 
   ///constructor for decimal number picker
-  NumberPicker.decimal(
-      {Key key,
-      @required double initialValue,
-      @required this.minValue,
-      @required this.maxValue,
-      @required this.onChanged,
-      this.decimalPlaces = 1,
-      this.itemExtent = kDefaultItemExtent,
-      this.listViewWidth = kDefaultListViewCrossAxisSize,
-      this.scrollDirection = Axis.vertical})
-      : assert(initialValue != null),
+  NumberPicker.decimal({
+    Key key,
+    @required double initialValue,
+    @required this.minValue,
+    @required this.maxValue,
+    @required this.onChanged,
+    this.decimalPlaces = 1,
+    this.itemExtent = kDefaultItemExtent,
+    this.listViewWidth = kDefaultListViewCrossAxisSize,
+  })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
         assert(decimalPlaces != null && decimalPlaces > 0),
         assert(maxValue > minValue),
         assert(initialValue >= minValue && initialValue <= maxValue),
-        assert(scrollDirection != null),
         selectedIntValue = initialValue.floor(),
         selectedDecimalValue = ((initialValue - initialValue.floorToDouble()) *
                 math.pow(10, decimalPlaces))
@@ -113,6 +113,7 @@ class NumberPicker extends StatelessWidget {
         ),
         listViewHeight = 3 * itemExtent,
         step = 1,
+        scrollDirection = Axis.vertical,
         integerItemCount = maxValue.floor() - minValue.floor() + 1,
         infiniteLoop = false,
         super(key: key);
