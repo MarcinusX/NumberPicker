@@ -8,7 +8,7 @@ It is possible to use NumberPicker as a standalone widget as well as in NumberPi
 ## Getting Started
 #### Creating NumberPicker Widget
 
-```
+```dart
 new NumberPicker.integer(
                 initialValue: 50,
                 minValue: 0,
@@ -16,7 +16,7 @@ new NumberPicker.integer(
                 onChanged: _handleChange)
 ```
 #### Creating NumberPickerDialog (use in material's showDialog method)
-```
+```dart
 new NumberPickerDialog.decimal(
           minValue: 1,
           maxValue: 10,
@@ -27,7 +27,7 @@ See examples directory for full examples.
 
 #### Standalone widget
 ![vertical](https://raw.githubusercontent.com/MarcinusX/NumberPicker/master/example/screenshots/gif_widget.gif)
-```
+```dart
 class _MyHomePageState extends State<MyHomePage> {
   int _currentValue = 1;
 
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 #### Dialog
 ![vertical](https://raw.githubusercontent.com/MarcinusX/NumberPicker/master/example/screenshots/gif_dialog.gif)
-```
+```dart
 class _MyHomePageState extends State<MyHomePage> {
   double _currentPrice = 1.0;
 
