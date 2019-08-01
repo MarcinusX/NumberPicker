@@ -28,6 +28,8 @@ class NumberPicker extends StatelessWidget {
     this.listViewHeight = kDefaultListViewCrossAxisSize,
     this.step = 1,
     this.zeroPad = false,
+    this.highlightSelectedValue = true,
+    this.decoration,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -62,8 +64,7 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
-  })
-      : assert(initialValue != null),
+  })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
         assert(maxValue > minValue),
@@ -245,32 +246,45 @@ class NumberPicker extends StatelessWidget {
       child: new Container(
         height: listViewHeight,
         width: listViewWidth,
-        child: new ListView.builder(
-          scrollDirection: scrollDirection,
-          controller: intScrollController,
-          itemExtent: itemExtent,
-          itemCount: listItemCount,
-          cacheExtent: _calculateCacheExtent(listItemCount),
-          itemBuilder: (BuildContext context, int index) {
-            final int value = _intValueFromIndex(index);
+        child: Stack(
+          children: <Widget>[
+            new ListView.builder(
+              scrollDirection: scrollDirection,
+              controller: intScrollController,
+              itemExtent: itemExtent,
+              itemCount: listItemCount,
+              cacheExtent: _calculateCacheExtent(listItemCount),
+              itemBuilder: (BuildContext context, int index) {
+                final int value = _intValueFromIndex(index);
 
-            //define special style for selected (middle) element
-            final TextStyle itemStyle =
-            ((value == selectedIntValue) && highlightSelectedValue)
-                ? selectedStyle
-                : defaultStyle;
+                //define special style for selected (middle) element
+                final TextStyle itemStyle =
+                    value == selectedIntValue && highlightSelectedValue
+                        ? selectedStyle
+                        : defaultStyle;
 
-            bool isExtra = index == 0 || index == listItemCount - 1;
+                bool isExtra = index == 0 || index == listItemCount - 1;
 
-            return isExtra
-                ? new Container() //empty first and last element
-                : new Center(
-                    child: new Text(
-                      getDisplayedValue(value),
-                      style: itemStyle,
-                    ),
-                  );
-          },
+                return isExtra
+                    ? new Container() //empty first and last element
+                    : new Center(
+                        child: new Text(
+                          getDisplayedValue(value),
+                          style: itemStyle,
+                        ),
+                      );
+              },
+            ),
+            new Center(
+              child: new IgnorePointer(
+                child: new Container(
+                  width: double.infinity,
+                  height: itemExtent,
+                  decoration: decoration,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       onNotification: _onIntegerNotification,
@@ -289,29 +303,42 @@ class NumberPicker extends StatelessWidget {
       child: new Container(
         height: listViewHeight,
         width: listViewWidth,
-        child: new ListView.builder(
-          controller: decimalScrollController,
-          itemExtent: itemExtent,
-          itemCount: decimalItemCount,
-          itemBuilder: (BuildContext context, int index) {
-            final int value = index - 1;
+        child: Stack(
+          children: <Widget>[
+            new ListView.builder(
+              controller: decimalScrollController,
+              itemExtent: itemExtent,
+              itemCount: decimalItemCount,
+              itemBuilder: (BuildContext context, int index) {
+                final int value = index - 1;
 
-            //define special style for selected (middle) element
-            final TextStyle itemStyle =
-            (value == selectedDecimalValue && highlightSelectedValue)
-                ? selectedStyle
-                : defaultStyle;
+                //define special style for selected (middle) element
+                final TextStyle itemStyle =
+                    value == selectedDecimalValue && highlightSelectedValue
+                        ? selectedStyle
+                        : defaultStyle;
 
-            bool isExtra = index == 0 || index == decimalItemCount - 1;
+                bool isExtra = index == 0 || index == decimalItemCount - 1;
 
-            return isExtra
-                ? new Container() //empty first and last element
-                : new Center(
-                    child: new Text(
-                        value.toString().padLeft(decimalPlaces, '0'),
-                        style: itemStyle),
-                  );
-          },
+                return isExtra
+                    ? new Container() //empty first and last element
+                    : new Center(
+                        child: new Text(
+                            value.toString().padLeft(decimalPlaces, '0'),
+                            style: itemStyle),
+                      );
+              },
+            ),
+            new Center(
+              child: new IgnorePointer(
+                child: new Container(
+                  width: double.infinity,
+                  height: itemExtent,
+                  decoration: decoration,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
       onNotification: _onDecimalNotification,
@@ -335,7 +362,9 @@ class NumberPicker extends StatelessWidget {
 
             //define special style for selected (middle) element
             final TextStyle itemStyle =
-                value == selectedIntValue ? selectedStyle : defaultStyle;
+                value == selectedIntValue && highlightSelectedValue
+                    ? selectedStyle
+                    : defaultStyle;
 
             return new Center(
               child: new Text(

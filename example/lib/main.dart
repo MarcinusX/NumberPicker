@@ -39,6 +39,19 @@ class _MyHomePageState extends State<MyHomePage> {
   NumberPicker integerInfiniteNumberPicker;
   NumberPicker decimalNumberPicker;
 
+  Decoration _decoration = new BoxDecoration(
+    border: new Border(
+      top: new BorderSide(
+        style: BorderStyle.solid,
+        color: Colors.black26,
+      ),
+      bottom: new BorderSide(
+        style: BorderStyle.solid,
+        color: Colors.black26,
+      ),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     _initializeNumberPickers();
@@ -130,6 +143,8 @@ class _MyHomePageState extends State<MyHomePage> {
       minValue: 1,
       maxValue: 5,
       decimalPlaces: 2,
+      highlightSelectedValue: false,
+      decoration: _decoration,
       onChanged: (value) => setState(() => _currentDoubleValue = value),
     );
   }
@@ -181,6 +196,8 @@ class _MyHomePageState extends State<MyHomePage> {
           minValue: 1,
           maxValue: 5,
           decimalPlaces: 2,
+          highlightSelectedValue: false,
+          decoration: _decoration,
           initialDoubleValue: _currentDoubleValue,
           title: new Text("Pick a decimal number"),
         );
