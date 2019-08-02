@@ -115,4 +115,18 @@ void main() {
         infiniteLoop: true,
         expectedDisplayValues: ['09', '10', '00']);
   });
+
+  testWidgets('Decorated number picker works', (WidgetTester tester) async {
+    await testNumberPicker(
+      tester: tester,
+      minValue: 0,
+      maxValue: 10,
+      initialValue: 2,
+      scrollBy: 2,
+      expectedValue: 4,
+      infiniteLoop: true,
+      highlightSelectedValue: false,
+      decoration: decoration,
+    );
+  });
 }

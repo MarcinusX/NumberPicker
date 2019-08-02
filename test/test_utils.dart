@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:numberpicker/numberpicker.dart';
 
+Decoration decoration = new BoxDecoration(
+  border: new Border(
+    top: new BorderSide(
+      style: BorderStyle.solid,
+      color: Colors.black26,
+    ),
+    bottom: new BorderSide(
+      style: BorderStyle.solid,
+      color: Colors.black26,
+    ),
+  ),
+);
+
 Future<NumberPicker> testNumberPicker({
   WidgetTester tester,
   int minValue,
@@ -13,6 +26,8 @@ Future<NumberPicker> testNumberPicker({
   bool animateToItself = false,
   Axis axis = Axis.vertical,
   bool infiniteLoop = false,
+  Decoration decoration,
+  bool highlightSelectedValue = true,
 }) async {
   int value = initialValue;
   NumberPicker picker;
@@ -26,6 +41,8 @@ Future<NumberPicker> testNumberPicker({
               maxValue: maxValue,
               step: step,
               infiniteLoop: infiniteLoop,
+              decoration: decoration,
+              highlightSelectedValue: highlightSelectedValue,
               onChanged: (newValue) => setState(() => value = newValue),
             )
           : NumberPicker.horizontal(
@@ -33,6 +50,8 @@ Future<NumberPicker> testNumberPicker({
               minValue: minValue,
               maxValue: maxValue,
               step: step,
+              decoration: decoration,
+              highlightSelectedValue: highlightSelectedValue,
               onChanged: (newValue) => setState(() => value = newValue),
             );
       return MaterialApp(

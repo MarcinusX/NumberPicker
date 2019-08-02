@@ -33,11 +33,26 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIntValue = 10;
   int _currentHorizontalIntValue = 10;
   int _currentInfIntValue = 10;
+  int _currentInfIntValueDecorated = 10;
   double _currentDoubleValue = 3.0;
   NumberPicker integerNumberPicker;
   NumberPicker horizontalNumberPicker;
   NumberPicker integerInfiniteNumberPicker;
+  NumberPicker integerInfiniteDecoratedNumberPicker;
   NumberPicker decimalNumberPicker;
+
+  Decoration _decoration = new BoxDecoration(
+    border: new Border(
+      top: new BorderSide(
+        style: BorderStyle.solid,
+        color: Colors.black26,
+      ),
+      bottom: new BorderSide(
+        style: BorderStyle.solid,
+        color: Colors.black26,
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +103,21 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Column(
               children: <Widget>[
+                SizedBox(height: 16),
+                Text('Default', style: Theme.of(context).textTheme.title),
                 integerInfiniteNumberPicker,
                 new RaisedButton(
                   onPressed: () => _showInfIntDialog(),
                   child: new Text("Current int value: $_currentInfIntValue"),
+                ),
+                Divider(color: Colors.grey, height: 32),
+                Text('Decorated', style: Theme.of(context).textTheme.title),
+                integerInfiniteDecoratedNumberPicker,
+                Text(
+                  "Current int value: $_currentInfIntValueDecorated",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ],
             )
@@ -124,6 +150,17 @@ class _MyHomePageState extends State<MyHomePage> {
       step: 10,
       infiniteLoop: true,
       onChanged: (value) => setState(() => _currentInfIntValue = value),
+    );
+    integerInfiniteDecoratedNumberPicker = new NumberPicker.integer(
+      initialValue: _currentInfIntValueDecorated,
+      minValue: 0,
+      maxValue: 99,
+      step: 10,
+      infiniteLoop: true,
+      highlightSelectedValue: false,
+      decoration: _decoration,
+      onChanged: (value) =>
+          setState(() => _currentInfIntValueDecorated = value),
     );
     decimalNumberPicker = new NumberPicker.decimal(
       initialValue: _currentDoubleValue,
@@ -188,7 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
     ).then((num value) {
       if (value != null) {
         setState(() => _currentDoubleValue = value);
-        decimalNumberPicker.animateInt(value);
+        decimalNumberPicker.animateDecimalAndInteger(value);
       }
     });
   }
