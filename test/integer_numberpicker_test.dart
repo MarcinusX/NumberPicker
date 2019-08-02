@@ -100,4 +100,17 @@ void main() {
         scrollBy: 1,
         expectedDisplayValues: ['02', '03', '04']);
   });
+
+  testWidgets('Decorated number picker works', (WidgetTester tester) async {
+    await testNumberPicker(
+      tester: tester,
+      minValue: 0,
+      maxValue: 10,
+      initialValue: 2,
+      scrollBy: 2,
+      expectedValue: 4,
+      highlightSelectedValue: false,
+      decoration: decoration,
+    );
+  });
 }
