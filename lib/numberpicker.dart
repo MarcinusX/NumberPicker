@@ -346,25 +346,34 @@ class NumberPicker extends StatelessWidget {
       child: new Container(
         height: listViewHeight,
         width: listViewWidth,
-        child: new InfiniteListView.builder(
-          controller: intScrollController,
-          itemExtent: itemExtent,
-          itemBuilder: (BuildContext context, int index) {
-            final int value = _intValueFromIndex(index);
+        child: Stack(
+          children: <Widget>[
+            InfiniteListView.builder(
+              controller: intScrollController,
+              itemExtent: itemExtent,
+              itemBuilder: (BuildContext context, int index) {
+                final int value = _intValueFromIndex(index);
 
-            //define special style for selected (middle) element
-            final TextStyle itemStyle =
-                value == selectedIntValue && highlightSelectedValue
-                    ? selectedStyle
-                    : defaultStyle;
+                //define special style for selected (middle) element
+                final TextStyle itemStyle =
+                    value == selectedIntValue && highlightSelectedValue
+                        ? selectedStyle
+                        : defaultStyle;
 
-            return new Center(
-              child: new Text(
-                getDisplayedValue(value),
-                style: itemStyle,
-              ),
-            );
-          },
+                return new Center(
+                  child: new Text(
+                    getDisplayedValue(value),
+                    style: itemStyle,
+                  ),
+                );
+              },
+            ),
+            _NumberPickerSelectedItemDecoration(
+              axis: scrollDirection,
+              itemExtent: itemExtent,
+              decoration: decoration,
+            ),
+          ],
         ),
       ),
       onNotification: _onIntegerNotification,
