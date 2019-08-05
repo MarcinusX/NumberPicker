@@ -491,8 +491,8 @@ class NumberPicker extends StatelessWidget {
   ///To prevent this we are calculating cacheExtent by our own so it gets smaller if number of items is smaller
   double _calculateCacheExtent(int itemCount) {
     double cacheExtent = 250.0; //default cache extent
-    if ((itemCount - 2) * NumberPicker.kDefaultItemExtent <= cacheExtent) {
-      cacheExtent = ((itemCount - 3) * NumberPicker.kDefaultItemExtent);
+    if ((itemCount - 2) * kDefaultItemExtent <= cacheExtent) {
+      cacheExtent = ((itemCount - 3) * kDefaultItemExtent);
     }
     return cacheExtent;
   }
@@ -542,19 +542,19 @@ class NumberPicker extends StatelessWidget {
     int estimatedCurrentValue = minValue + step * (estimatedIndex % length);
 
     ///number of elements that are above currently selected element to new selected element
-    int elementsAboveCurrentlySelected;
+    int elementsCounterAboveCurrentlySelected;
     if (valueToSelect < estimatedCurrentValue) {
-      elementsAboveCurrentlySelected =
+      elementsCounterAboveCurrentlySelected =
           (estimatedCurrentValue - valueToSelect) ~/ step;
     } else {
-      elementsAboveCurrentlySelected =
+      elementsCounterAboveCurrentlySelected =
           (estimatedCurrentValue - minValue) ~/ step +
               (maxValue - valueToSelect) ~/ step;
     }
-    if (elementsAboveCurrentlySelected > length / 2) {
-      estimatedIndex += length - elementsAboveCurrentlySelected - 1;
+    if (elementsCounterAboveCurrentlySelected > length / 2) {
+      estimatedIndex += length - elementsCounterAboveCurrentlySelected - 1;
     } else {
-      estimatedIndex -= elementsAboveCurrentlySelected;
+      estimatedIndex -= elementsCounterAboveCurrentlySelected;
     }
     return estimatedIndex;
   }
