@@ -190,8 +190,13 @@ class NumberPicker extends StatelessWidget {
   //
 
   animateInt(int valueToSelect) {
-    int diff = valueToSelect - minValue;
-    int index = diff ~/ step;
+    int index;
+    if (infiniteLoop) {
+      index = _getInfiniteLoopElementIndex(valueToSelect);
+    } else {
+      int diff = valueToSelect - minValue;
+      index = diff ~/ step;
+    }
     animateIntToIndex(index);
   }
 
@@ -242,48 +247,55 @@ class NumberPicker extends StatelessWidget {
 
     var listItemCount = integerItemCount + 2;
 
-    return new NotificationListener(
-      child: new Container(
-        height: listViewHeight,
-        width: listViewWidth,
-        child: Stack(
-          children: <Widget>[
-            new ListView.builder(
-              scrollDirection: scrollDirection,
-              controller: intScrollController,
-              itemExtent: itemExtent,
-              itemCount: listItemCount,
-              cacheExtent: _calculateCacheExtent(listItemCount),
-              itemBuilder: (BuildContext context, int index) {
-                final int value = _intValueFromIndex(index);
+    return Listener(
+      onPointerUp: (ev) {
+        if (intScrollController.position.activity is HoldScrollActivity) {
+          animateInt(selectedIntValue);
+        }
+      },
+      child: new NotificationListener(
+        child: new Container(
+          height: listViewHeight,
+          width: listViewWidth,
+          child: Stack(
+            children: <Widget>[
+              new ListView.builder(
+                scrollDirection: scrollDirection,
+                controller: intScrollController,
+                itemExtent: itemExtent,
+                itemCount: listItemCount,
+                cacheExtent: _calculateCacheExtent(listItemCount),
+                itemBuilder: (BuildContext context, int index) {
+                  final int value = _intValueFromIndex(index);
 
-                //define special style for selected (middle) element
-                final TextStyle itemStyle =
-                    value == selectedIntValue && highlightSelectedValue
-                        ? selectedStyle
-                        : defaultStyle;
+                  //define special style for selected (middle) element
+                  final TextStyle itemStyle =
+                      value == selectedIntValue && highlightSelectedValue
+                          ? selectedStyle
+                          : defaultStyle;
 
-                bool isExtra = index == 0 || index == listItemCount - 1;
+                  bool isExtra = index == 0 || index == listItemCount - 1;
 
-                return isExtra
-                    ? new Container() //empty first and last element
-                    : new Center(
-                        child: new Text(
-                          getDisplayedValue(value),
-                          style: itemStyle,
-                        ),
-                      );
-              },
-            ),
-            _NumberPickerSelectedItemDecoration(
-              axis: scrollDirection,
-              itemExtent: itemExtent,
-              decoration: decoration,
-            ),
-          ],
+                  return isExtra
+                      ? new Container() //empty first and last element
+                      : new Center(
+                          child: new Text(
+                            getDisplayedValue(value),
+                            style: itemStyle,
+                          ),
+                        );
+                },
+              ),
+              _NumberPickerSelectedItemDecoration(
+                axis: scrollDirection,
+                itemExtent: itemExtent,
+                decoration: decoration,
+              ),
+            ],
+          ),
         ),
+        onNotification: _onIntegerNotification,
       ),
-      onNotification: _onIntegerNotification,
     );
   }
 
@@ -295,45 +307,52 @@ class NumberPicker extends StatelessWidget {
     int decimalItemCount =
         selectedIntValue == maxValue ? 3 : math.pow(10, decimalPlaces) + 2;
 
-    return new NotificationListener(
-      child: new Container(
-        height: listViewHeight,
-        width: listViewWidth,
-        child: Stack(
-          children: <Widget>[
-            new ListView.builder(
-              controller: decimalScrollController,
-              itemExtent: itemExtent,
-              itemCount: decimalItemCount,
-              itemBuilder: (BuildContext context, int index) {
-                final int value = index - 1;
+    return Listener(
+      onPointerUp: (ev) {
+        if (decimalScrollController.position.activity is HoldScrollActivity) {
+          animateDecimal(selectedDecimalValue);
+        }
+      },
+      child: new NotificationListener(
+        child: new Container(
+          height: listViewHeight,
+          width: listViewWidth,
+          child: Stack(
+            children: <Widget>[
+              new ListView.builder(
+                controller: decimalScrollController,
+                itemExtent: itemExtent,
+                itemCount: decimalItemCount,
+                itemBuilder: (BuildContext context, int index) {
+                  final int value = index - 1;
 
-                //define special style for selected (middle) element
-                final TextStyle itemStyle =
-                    value == selectedDecimalValue && highlightSelectedValue
-                        ? selectedStyle
-                        : defaultStyle;
+                  //define special style for selected (middle) element
+                  final TextStyle itemStyle =
+                      value == selectedDecimalValue && highlightSelectedValue
+                          ? selectedStyle
+                          : defaultStyle;
 
-                bool isExtra = index == 0 || index == decimalItemCount - 1;
+                  bool isExtra = index == 0 || index == decimalItemCount - 1;
 
-                return isExtra
-                    ? new Container() //empty first and last element
-                    : new Center(
-                        child: new Text(
-                            value.toString().padLeft(decimalPlaces, '0'),
-                            style: itemStyle),
-                      );
-              },
-            ),
-            _NumberPickerSelectedItemDecoration(
-              axis: scrollDirection,
-              itemExtent: itemExtent,
-              decoration: decoration,
-            ),
-          ],
+                  return isExtra
+                      ? new Container() //empty first and last element
+                      : new Center(
+                          child: new Text(
+                              value.toString().padLeft(decimalPlaces, '0'),
+                              style: itemStyle),
+                        );
+                },
+              ),
+              _NumberPickerSelectedItemDecoration(
+                axis: scrollDirection,
+                itemExtent: itemExtent,
+                decoration: decoration,
+              ),
+            ],
+          ),
         ),
+        onNotification: _onDecimalNotification,
       ),
-      onNotification: _onDecimalNotification,
     );
   }
 
@@ -342,41 +361,47 @@ class NumberPicker extends StatelessWidget {
     TextStyle selectedStyle =
         themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
-    return new NotificationListener(
-      child: new Container(
-        height: listViewHeight,
-        width: listViewWidth,
-        child: Stack(
-          children: <Widget>[
-            InfiniteListView.builder(
-              controller: intScrollController,
-              itemExtent: itemExtent,
-              itemBuilder: (BuildContext context, int index) {
-                final int value = _intValueFromIndex(index);
+    return Listener(
+      onPointerUp: (ev) {
+        if (intScrollController.position.activity is HoldScrollActivity) {
+          animateInt(selectedIntValue);
+        }
+      },
+      child: new NotificationListener(
+        child: new Container(
+          height: listViewHeight,
+          width: listViewWidth,
+          child: Stack(
+            children: <Widget>[
+              InfiniteListView.builder(
+                controller: intScrollController,
+                itemExtent: itemExtent,
+                itemBuilder: (BuildContext context, int index) {
+                  final int value = _intValueFromIndex(index);
+                  //define special style for selected (middle) element
+                  final TextStyle itemStyle =
+                      value == selectedIntValue && highlightSelectedValue
+                          ? selectedStyle
+                          : defaultStyle;
 
-                //define special style for selected (middle) element
-                final TextStyle itemStyle =
-                    value == selectedIntValue && highlightSelectedValue
-                        ? selectedStyle
-                        : defaultStyle;
-
-                return new Center(
-                  child: new Text(
-                    getDisplayedValue(value),
-                    style: itemStyle,
-                  ),
-                );
-              },
-            ),
-            _NumberPickerSelectedItemDecoration(
-              axis: scrollDirection,
-              itemExtent: itemExtent,
-              decoration: decoration,
-            ),
-          ],
+                  return new Center(
+                    child: new Text(
+                      getDisplayedValue(value),
+                      style: itemStyle,
+                    ),
+                  );
+                },
+              ),
+              _NumberPickerSelectedItemDecoration(
+                axis: scrollDirection,
+                itemExtent: itemExtent,
+                decoration: decoration,
+              ),
+            ],
+          ),
         ),
+        onNotification: _onIntegerNotification,
       ),
-      onNotification: _onIntegerNotification,
     );
   }
 
@@ -466,8 +491,8 @@ class NumberPicker extends StatelessWidget {
   ///To prevent this we are calculating cacheExtent by our own so it gets smaller if number of items is smaller
   double _calculateCacheExtent(int itemCount) {
     double cacheExtent = 250.0; //default cache extent
-    if ((itemCount - 2) * kDefaultItemExtent <= cacheExtent) {
-      cacheExtent = ((itemCount - 3) * kDefaultItemExtent);
+    if ((itemCount - 2) * NumberPicker.kDefaultItemExtent <= cacheExtent) {
+      cacheExtent = ((itemCount - 3) * NumberPicker.kDefaultItemExtent);
     }
     return cacheExtent;
   }
@@ -498,6 +523,40 @@ class NumberPicker extends StatelessWidget {
     return notification is UserScrollNotification &&
         notification.direction == ScrollDirection.idle &&
         scrollController.position.activity is! HoldScrollActivity;
+  }
+
+  ///allows to get index of new selected value element for infinite integer number picker
+  int _getInfiniteLoopElementIndex(int valueToSelect) {
+    ///number of elements with unique values in list view
+    int length = (maxValue - minValue) ~/ step + 1;
+
+    ///estimated index of current selected element based on index and item extent
+    int estimatedIndex = intScrollController.offset ~/ itemExtent;
+
+    ///when more than half of highest element height is not visible then estimated index is incremented
+    if (intScrollController.offset % itemExtent > itemExtent / 2) {
+      estimatedIndex++;
+    }
+
+    ///estimated value of currently selected element
+    int estimatedCurrentValue = minValue + step * (estimatedIndex % length);
+
+    ///number of elements that are above currently selected element to new selected element
+    int elementsAboveCurrentlySelected;
+    if (valueToSelect < estimatedCurrentValue) {
+      elementsAboveCurrentlySelected =
+          (estimatedCurrentValue - valueToSelect) ~/ step;
+    } else {
+      elementsAboveCurrentlySelected =
+          (estimatedCurrentValue - minValue) ~/ step +
+              (maxValue - valueToSelect) ~/ step;
+    }
+    if (elementsAboveCurrentlySelected > length / 2) {
+      estimatedIndex += length - elementsAboveCurrentlySelected - 1;
+    } else {
+      estimatedIndex -= elementsAboveCurrentlySelected;
+    }
+    return estimatedIndex;
   }
 
   ///converts integer indicator of decimal value to double
