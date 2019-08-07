@@ -1,3 +1,10 @@
+## [1.1.0]
+* Added zero-pad
+* Added custom decoration for selected value
+* Added disabling highlight of selected value
+* Added horizontal number picker
+* Fixed bug with animating selected value when user stops scrolling
+
 ## [1.0.0]
 * Added infinite loop option
 
