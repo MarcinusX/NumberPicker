@@ -174,6 +174,7 @@ class NumberPicker extends StatelessWidget {
   /// if min=0, max=5, step=3, then items will be 0 and 3.
   final int step;
 
+  /// Direction of scrolling
   final Axis scrollDirection;
 
   ///Repeat values infinitely
@@ -189,21 +190,25 @@ class NumberPicker extends StatelessWidget {
   //----------------------------- PUBLIC ------------------------------
   //
 
-  animateInt(int valueToSelect) {
+  /// Used to animate integer number picker to new selected value
+  void animateInt(int valueToSelect) {
     int diff = valueToSelect - minValue;
     int index = diff ~/ step;
     animateIntToIndex(index);
   }
 
-  animateIntToIndex(int index) {
+  /// Used to animate integer number picker to new selected index
+  void animateIntToIndex(int index) {
     _animate(intScrollController, index * itemExtent);
   }
 
-  animateDecimal(int decimalValue) {
+  /// Used to animate decimal part of double value to new selected value
+  void animateDecimal(int decimalValue) {
     _animate(decimalScrollController, decimalValue * itemExtent);
   }
 
-  animateDecimalAndInteger(double valueToSelect) {
+  /// Used to animate decimal number picker to selected value
+  void animateDecimalAndInteger(double valueToSelect) {
     animateInt(valueToSelect.floor());
     animateDecimal(((valueToSelect - valueToSelect.floorToDouble()) *
             math.pow(10, decimalPlaces))
@@ -654,7 +659,7 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
   _NumberPickerDialogControllerState(
       this.selectedIntValue, this.selectedDoubleValue);
 
-  _handleValueChanged(num value) {
+  void _handleValueChanged(num value) {
     if (value is int) {
       setState(() => selectedIntValue = value);
     } else {
