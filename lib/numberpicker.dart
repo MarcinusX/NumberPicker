@@ -524,14 +524,14 @@ class NumberPicker extends StatelessWidget {
         scrollController.position.activity is! HoldScrollActivity;
   }
 
-  ///allows to find currently selected element index and animate this element
-  ///used when user stops scrolling in infinite loop
+  /// Allows to find currently selected element index and animate this element
+  /// Use it only when user manually stops scrolling in infinite loop
   void _animateIntWhenUserStoppedScrolling(int valueToSelect) {
-    ///estimated index of currently selected element based on index and item extent
+    // estimated index of currently selected element based on offset and item extent
     int currentlySelectedElementIndex = intScrollController.offset ~/ itemExtent;
 
-    ///when more(less) than half of highest(lowest) element is not visible
-    ///then index is incremented(decremented) when positive(negative) offset
+    // when more(less) than half of the top(bottom) element is hidden
+    // then we should increment(decrement) index in case of positive(negative) offset
     if (intScrollController.offset > 0 &&
         intScrollController.offset % itemExtent > itemExtent / 2) {
       currentlySelectedElementIndex++;
