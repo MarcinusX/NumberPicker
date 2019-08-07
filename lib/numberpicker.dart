@@ -242,48 +242,56 @@ class NumberPicker extends StatelessWidget {
 
     var listItemCount = integerItemCount + 2;
 
-    return new NotificationListener(
-      child: new Container(
-        height: listViewHeight,
-        width: listViewWidth,
-        child: Stack(
-          children: <Widget>[
-            new ListView.builder(
-              scrollDirection: scrollDirection,
-              controller: intScrollController,
-              itemExtent: itemExtent,
-              itemCount: listItemCount,
-              cacheExtent: _calculateCacheExtent(listItemCount),
-              itemBuilder: (BuildContext context, int index) {
-                final int value = _intValueFromIndex(index);
+    return Listener(
+      onPointerUp: (ev) {
+        ///used to detect that user stopped scrolling
+        if (intScrollController.position.activity is HoldScrollActivity) {
+          animateInt(selectedIntValue);
+        }
+      },
+      child: new NotificationListener(
+        child: new Container(
+          height: listViewHeight,
+          width: listViewWidth,
+          child: Stack(
+            children: <Widget>[
+              new ListView.builder(
+                scrollDirection: scrollDirection,
+                controller: intScrollController,
+                itemExtent: itemExtent,
+                itemCount: listItemCount,
+                cacheExtent: _calculateCacheExtent(listItemCount),
+                itemBuilder: (BuildContext context, int index) {
+                  final int value = _intValueFromIndex(index);
 
-                //define special style for selected (middle) element
-                final TextStyle itemStyle =
-                    value == selectedIntValue && highlightSelectedValue
-                        ? selectedStyle
-                        : defaultStyle;
+                  //define special style for selected (middle) element
+                  final TextStyle itemStyle =
+                      value == selectedIntValue && highlightSelectedValue
+                          ? selectedStyle
+                          : defaultStyle;
 
-                bool isExtra = index == 0 || index == listItemCount - 1;
+                  bool isExtra = index == 0 || index == listItemCount - 1;
 
-                return isExtra
-                    ? new Container() //empty first and last element
-                    : new Center(
-                        child: new Text(
-                          getDisplayedValue(value),
-                          style: itemStyle,
-                        ),
-                      );
-              },
-            ),
-            _NumberPickerSelectedItemDecoration(
-              axis: scrollDirection,
-              itemExtent: itemExtent,
-              decoration: decoration,
-            ),
-          ],
+                  return isExtra
+                      ? new Container() //empty first and last element
+                      : new Center(
+                          child: new Text(
+                            getDisplayedValue(value),
+                            style: itemStyle,
+                          ),
+                        );
+                },
+              ),
+              _NumberPickerSelectedItemDecoration(
+                axis: scrollDirection,
+                itemExtent: itemExtent,
+                decoration: decoration,
+              ),
+            ],
+          ),
         ),
+        onNotification: _onIntegerNotification,
       ),
-      onNotification: _onIntegerNotification,
     );
   }
 
@@ -295,45 +303,53 @@ class NumberPicker extends StatelessWidget {
     int decimalItemCount =
         selectedIntValue == maxValue ? 3 : math.pow(10, decimalPlaces) + 2;
 
-    return new NotificationListener(
-      child: new Container(
-        height: listViewHeight,
-        width: listViewWidth,
-        child: Stack(
-          children: <Widget>[
-            new ListView.builder(
-              controller: decimalScrollController,
-              itemExtent: itemExtent,
-              itemCount: decimalItemCount,
-              itemBuilder: (BuildContext context, int index) {
-                final int value = index - 1;
+    return Listener(
+      onPointerUp: (ev) {
+        ///used to detect that user stopped scrolling
+        if (decimalScrollController.position.activity is HoldScrollActivity) {
+          animateDecimal(selectedDecimalValue);
+        }
+      },
+      child: new NotificationListener(
+        child: new Container(
+          height: listViewHeight,
+          width: listViewWidth,
+          child: Stack(
+            children: <Widget>[
+              new ListView.builder(
+                controller: decimalScrollController,
+                itemExtent: itemExtent,
+                itemCount: decimalItemCount,
+                itemBuilder: (BuildContext context, int index) {
+                  final int value = index - 1;
 
-                //define special style for selected (middle) element
-                final TextStyle itemStyle =
-                    value == selectedDecimalValue && highlightSelectedValue
-                        ? selectedStyle
-                        : defaultStyle;
+                  //define special style for selected (middle) element
+                  final TextStyle itemStyle =
+                      value == selectedDecimalValue && highlightSelectedValue
+                          ? selectedStyle
+                          : defaultStyle;
 
-                bool isExtra = index == 0 || index == decimalItemCount - 1;
+                  bool isExtra = index == 0 || index == decimalItemCount - 1;
 
-                return isExtra
-                    ? new Container() //empty first and last element
-                    : new Center(
-                        child: new Text(
-                            value.toString().padLeft(decimalPlaces, '0'),
-                            style: itemStyle),
-                      );
-              },
-            ),
-            _NumberPickerSelectedItemDecoration(
-              axis: scrollDirection,
-              itemExtent: itemExtent,
-              decoration: decoration,
-            ),
-          ],
+                  return isExtra
+                      ? new Container() //empty first and last element
+                      : new Center(
+                          child: new Text(
+                              value.toString().padLeft(decimalPlaces, '0'),
+                              style: itemStyle),
+                        );
+                },
+              ),
+              _NumberPickerSelectedItemDecoration(
+                axis: scrollDirection,
+                itemExtent: itemExtent,
+                decoration: decoration,
+              ),
+            ],
+          ),
         ),
+        onNotification: _onDecimalNotification,
       ),
-      onNotification: _onDecimalNotification,
     );
   }
 
@@ -342,41 +358,49 @@ class NumberPicker extends StatelessWidget {
     TextStyle selectedStyle =
         themeData.textTheme.headline.copyWith(color: themeData.accentColor);
 
-    return new NotificationListener(
-      child: new Container(
-        height: listViewHeight,
-        width: listViewWidth,
-        child: Stack(
-          children: <Widget>[
-            InfiniteListView.builder(
-              controller: intScrollController,
-              itemExtent: itemExtent,
-              itemBuilder: (BuildContext context, int index) {
-                final int value = _intValueFromIndex(index);
+    return Listener(
+      onPointerUp: (ev) {
+        ///used to detect that user stopped scrolling
+        if (intScrollController.position.activity is HoldScrollActivity) {
+          _animateIntWhenUserStoppedScrolling(selectedIntValue);
+        }
+      },
+      child: new NotificationListener(
+        child: new Container(
+          height: listViewHeight,
+          width: listViewWidth,
+          child: Stack(
+            children: <Widget>[
+              InfiniteListView.builder(
+                controller: intScrollController,
+                itemExtent: itemExtent,
+                itemBuilder: (BuildContext context, int index) {
+                  final int value = _intValueFromIndex(index);
 
-                //define special style for selected (middle) element
-                final TextStyle itemStyle =
-                    value == selectedIntValue && highlightSelectedValue
-                        ? selectedStyle
-                        : defaultStyle;
+                  //define special style for selected (middle) element
+                  final TextStyle itemStyle =
+                      value == selectedIntValue && highlightSelectedValue
+                          ? selectedStyle
+                          : defaultStyle;
 
-                return new Center(
-                  child: new Text(
-                    getDisplayedValue(value),
-                    style: itemStyle,
-                  ),
-                );
-              },
-            ),
-            _NumberPickerSelectedItemDecoration(
-              axis: scrollDirection,
-              itemExtent: itemExtent,
-              decoration: decoration,
-            ),
-          ],
+                  return new Center(
+                    child: new Text(
+                      getDisplayedValue(value),
+                      style: itemStyle,
+                    ),
+                  );
+                },
+              ),
+              _NumberPickerSelectedItemDecoration(
+                axis: scrollDirection,
+                itemExtent: itemExtent,
+                decoration: decoration,
+              ),
+            ],
+          ),
         ),
+        onNotification: _onIntegerNotification,
       ),
-      onNotification: _onIntegerNotification,
     );
   }
 
@@ -498,6 +522,25 @@ class NumberPicker extends StatelessWidget {
     return notification is UserScrollNotification &&
         notification.direction == ScrollDirection.idle &&
         scrollController.position.activity is! HoldScrollActivity;
+  }
+
+  /// Allows to find currently selected element index and animate this element
+  /// Use it only when user manually stops scrolling in infinite loop
+  void _animateIntWhenUserStoppedScrolling(int valueToSelect) {
+    // estimated index of currently selected element based on offset and item extent
+    int currentlySelectedElementIndex = intScrollController.offset ~/ itemExtent;
+
+    // when more(less) than half of the top(bottom) element is hidden
+    // then we should increment(decrement) index in case of positive(negative) offset
+    if (intScrollController.offset > 0 &&
+        intScrollController.offset % itemExtent > itemExtent / 2) {
+      currentlySelectedElementIndex++;
+    } else if (intScrollController.offset < 0 &&
+        intScrollController.offset % itemExtent < itemExtent / 2) {
+      currentlySelectedElementIndex--;
+    }
+
+    animateIntToIndex(currentlySelectedElementIndex);
   }
 
   ///converts integer indicator of decimal value to double
