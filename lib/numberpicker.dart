@@ -530,9 +530,14 @@ class NumberPicker extends StatelessWidget {
     ///estimated index of currently selected element based on index and item extent
     int currentlySelectedElementIndex = intScrollController.offset ~/ itemExtent;
 
-    ///when more than half of highest element height is not visible then index is incremented
-    if (intScrollController.offset % itemExtent > itemExtent / 2) {
+    ///when more(less) than half of highest(lowest) element is not visible
+    ///then index is incremented(decremented) when positive(negative) offset
+    if (intScrollController.offset > 0 &&
+        intScrollController.offset % itemExtent > itemExtent / 2) {
       currentlySelectedElementIndex++;
+    } else if (intScrollController.offset < 0 &&
+        intScrollController.offset % itemExtent < itemExtent / 2) {
+      currentlySelectedElementIndex--;
     }
 
     animateIntToIndex(currentlySelectedElementIndex);
