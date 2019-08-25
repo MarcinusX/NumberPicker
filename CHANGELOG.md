@@ -1,3 +1,12 @@
+
+## [2.0.0]
+* Removed horizontal constructor
+* Added selectedValueTextStyle optional parameter
+* Added defaultTextStyle optional parameter
+* Added listViewHeight optional parameter
+* Fixed bugs with Axis.vertical which made it unusable
+
+
 ## [1.1.0]
 * Added zero-pad
 * Added custom decoration for selected value

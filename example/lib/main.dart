@@ -128,20 +128,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _initializeNumberPickers() {
+
+
+    integerNumberPicker = new NumberPicker.integer(
+      initialValue: _currentIntValue,
+      minValue: 0,
+      maxValue: 100,
+      step: 10,
+      defaultTextStyle: TextStyle(color: Colors.black38, fontSize: 12),
+      selectedValueTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
+      scrollDirection: Axis.horizontal,
+      onChanged: (value) => setState(() => _currentIntValue = value),
+    );
+
+
     integerNumberPicker = new NumberPicker.integer(
       initialValue: _currentIntValue,
       minValue: 0,
       maxValue: 100,
       step: 10,
       onChanged: (value) => setState(() => _currentIntValue = value),
-    );
-    horizontalNumberPicker = new NumberPicker.horizontal(
-      initialValue: _currentHorizontalIntValue,
-      minValue: 0,
-      maxValue: 100,
-      step: 10,
-      zeroPad: true,
-      onChanged: (value) => setState(() => _currentHorizontalIntValue = value),
     );
     integerInfiniteNumberPicker = new NumberPicker.integer(
       initialValue: _currentInfIntValue,

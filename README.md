@@ -6,7 +6,7 @@ It is possible to use NumberPicker as a standalone widget as well as in NumberPi
 ![vertical](https://raw.githubusercontent.com/MarcinusX/NumberPicker/master/example/screenshots/gif_example.gif)
 
 ## Getting Started
-#### Creating NumberPicker Widget
+#### Creating NumberPicker Vertical Widget
 
 ```dart
 new NumberPicker.integer(
@@ -15,6 +15,20 @@ new NumberPicker.integer(
                 maxValue: 100,
                 onChanged: _handleChange)
 ```
+#### Creating NumberPicker Horizontal Widget With custom text styles
+
+```dart
+new NumberPicker.integer(
+          initialValue: _currentIntValue,
+          minValue: 0,
+          maxValue: 100,
+          step: 10,
+          defaultTextStyle: TextStyle(color: Colors.black38, fontSize: 12),
+          selectedValueTextStyle: TextStyle(color: Colors.blue, fontSize: 16),
+          scrollDirection: Axis.horizontal,
+          onChanged: (value) => setState(() => _currentIntValue = value),
+        );
+```
 #### Creating NumberPickerDialog (use in material's showDialog method)
 ```dart
 new NumberPickerDialog.decimal(
@@ -22,6 +36,9 @@ new NumberPickerDialog.decimal(
           maxValue: 10,
           initialDoubleValue: _currentPrice),
 ```
+
+
+
 ### Usage examples
 See examples directory for full examples.
 
