@@ -1,3 +1,7 @@
+## [1.2.0]
+* Added text area near minimum value 
+* Added text area near maxiumum value 
+
 ## [1.1.0]
 * Added zero-pad
 * Added custom decoration for selected value

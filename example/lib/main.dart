@@ -211,10 +211,12 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future _showDoubleDialog() async {
-    await showDialog<double>(
+    var value = await showDialog<double>(
       context: context,
       builder: (BuildContext context) {
         return new NumberPickerDialog.decimal(
+          maxText: "kg",
+          minText: "wh",
           minValue: 1,
           maxValue: 5,
           decimalPlaces: 2,
@@ -222,11 +224,10 @@ class _MyHomePageState extends State<MyHomePage> {
           title: new Text("Pick a decimal number"),
         );
       },
-    ).then((num value) {
-      if (value != null) {
-        setState(() => _currentDoubleValue = value);
-        decimalNumberPicker.animateDecimalAndInteger(value);
-      }
-    });
+    );
+    if (value != null) {
+      setState(() => _currentDoubleValue = value);
+      decimalNumberPicker.animateDecimalAndInteger(value);
+    }
   }
 }

@@ -30,6 +30,8 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.maxText = "",
+    this.minText = "",
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -64,6 +66,8 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.maxText = "",
+    this.minText = "",
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -100,6 +104,8 @@ class NumberPicker extends StatelessWidget {
     this.listViewWidth = kDefaultListViewCrossAxisSize,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.maxText = "",
+    this.minText = "",
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -129,6 +135,12 @@ class NumberPicker extends StatelessWidget {
 
   ///called when selected value changes
   final ValueChanged<num> onChanged;
+
+  ///max value text field
+  final String maxText;
+
+  ///min value text field
+  final String minText;
 
   ///min value user can pick
   final int minValue;
@@ -281,7 +293,7 @@ class NumberPicker extends StatelessWidget {
                       ? new Container() //empty first and last element
                       : new Center(
                           child: new Text(
-                            getDisplayedValue(value),
+                            "${getDisplayedValue(value)} $minText",
                             style: itemStyle,
                           ),
                         );
@@ -340,7 +352,7 @@ class NumberPicker extends StatelessWidget {
                       ? new Container() //empty first and last element
                       : new Center(
                           child: new Text(
-                              value.toString().padLeft(decimalPlaces, '0'),
+                              "${value.toString().padLeft(decimalPlaces, '0')} $maxText ",
                               style: itemStyle),
                         );
                 },
@@ -533,7 +545,8 @@ class NumberPicker extends StatelessWidget {
   /// Use it only when user manually stops scrolling in infinite loop
   void _animateIntWhenUserStoppedScrolling(int valueToSelect) {
     // estimated index of currently selected element based on offset and item extent
-    int currentlySelectedElementIndex = intScrollController.offset ~/ itemExtent;
+    int currentlySelectedElementIndex =
+        intScrollController.offset ~/ itemExtent;
 
     // when more(less) than half of the top(bottom) element is hidden
     // then we should increment(decrement) index in case of positive(negative) offset
@@ -607,6 +620,8 @@ class NumberPickerDialog extends StatefulWidget {
   final bool zeroPad;
   final bool highlightSelectedValue;
   final Decoration decoration;
+  final String minText;
+  final String maxText;
 
   ///constructor for integer values
   NumberPickerDialog.integer({
@@ -622,6 +637,8 @@ class NumberPickerDialog extends StatefulWidget {
     this.decoration,
     Widget confirmWidget,
     Widget cancelWidget,
+    this.minText = "",
+    this.maxText = "",
   })  : confirmWidget = confirmWidget ?? new Text("OK"),
         cancelWidget = cancelWidget ?? new Text("CANCEL"),
         decimalPlaces = 0,
@@ -639,6 +656,8 @@ class NumberPickerDialog extends StatefulWidget {
     this.decoration,
     Widget confirmWidget,
     Widget cancelWidget,
+    this.minText = "",
+    this.maxText = "",
   })  : confirmWidget = confirmWidget ?? new Text("OK"),
         cancelWidget = cancelWidget ?? new Text("CANCEL"),
         initialIntegerValue = -1,
@@ -670,13 +689,16 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
   NumberPicker _buildNumberPicker() {
     if (widget.decimalPlaces > 0) {
       return new NumberPicker.decimal(
-          initialValue: selectedDoubleValue,
-          minValue: widget.minValue,
-          maxValue: widget.maxValue,
-          decimalPlaces: widget.decimalPlaces,
-          highlightSelectedValue: widget.highlightSelectedValue,
-          decoration: widget.decoration,
-          onChanged: _handleValueChanged);
+        initialValue: selectedDoubleValue,
+        minValue: widget.minValue,
+        maxValue: widget.maxValue,
+        decimalPlaces: widget.decimalPlaces,
+        highlightSelectedValue: widget.highlightSelectedValue,
+        decoration: widget.decoration,
+        onChanged: _handleValueChanged,
+        maxText: widget.maxText,
+        minText: widget.minText,
+      );
     } else {
       return new NumberPicker.integer(
         initialValue: selectedIntValue,
@@ -688,6 +710,8 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
         highlightSelectedValue: widget.highlightSelectedValue,
         decoration: widget.decoration,
         onChanged: _handleValueChanged,
+        maxText: widget.maxText,
+        minText: widget.minText,
       );
     }
   }
