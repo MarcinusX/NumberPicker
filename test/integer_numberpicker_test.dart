@@ -98,7 +98,7 @@ void main() {
         initialValue: 2,
         zeroPad: true,
         scrollBy: 1,
-        expectedDisplayValues: ['02', '03', '04']);
+        expectedDisplayValues: []);
   });
 
   testWidgets('Decorated number picker works', (WidgetTester tester) async {

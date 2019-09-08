@@ -123,7 +123,7 @@ Future<NumberPicker> testMultipleValuesInPicker({
   );
   expect(value, equals(initialValue));
 
-  await scrollNumberPicker(Offset(0.0, 0.0), tester, scrollBy, axis);
+  await scrollNumberPicker(Offset(0, 0), tester, scrollBy, axis);
   await tester.pumpAndSettle();
 
   for (String displayValue in expectedDisplayValues) {
