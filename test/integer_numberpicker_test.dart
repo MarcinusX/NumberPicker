@@ -113,4 +113,16 @@ void main() {
       decoration: decoration,
     );
   });
+
+  testWidgets('Text mapper works', (WidgetTester tester) async {
+    await testMultipleValuesInPicker(
+        tester: tester,
+        minValue: 0,
+        maxValue: 10,
+        initialValue: 2,
+        scrollBy: 1,
+        textMapper: (text) => '$text days',
+        expectedDisplayValues: ['2 days', '3 days', '4 days']);
+  });
+
 }
