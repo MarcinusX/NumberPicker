@@ -259,22 +259,33 @@ class NumberPicker extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final int value = _intValueFromIndex(index);
 
+                  bool isChoose = value == selectedIntValue && highlightSelectedValue;
                   //define special style for selected (middle) element
-                  final TextStyle itemStyle = value == selectedIntValue && highlightSelectedValue ? selectedStyle : defaultStyle;
+                  final TextStyle itemStyle = isChoose ? selectedStyle : defaultStyle;
 
                   bool isExtra = index == 0 || index == listItemCount - 1;
 
                   return isExtra
                       ? new Container() //empty first and last element
                       : new Center(
-                          child: new Opacity(
-                            opacity: 0.6,
-                            child: new Text(
-                              getDisplayedValue(value),
-                              style: itemStyle,
-                            ),
-                          ),
-                        );
+                          child: isChoose
+                              ? new Text(
+                                  getDisplayedValue(value),
+                                  style: itemStyle,
+                                )
+                              : new Stack(
+                                  children: <Widget>[
+                                    new Text(
+                                      getDisplayedValue(value),
+                                      style: itemStyle,
+                                    ),
+                                    new Opacity(
+                                        opacity: 0.6,
+                                        child: new Container(
+                                          color: Colors.white,
+                                        )),
+                                  ],
+                                ));
                 },
               ),
               _NumberPickerSelectedItemDecoration(
