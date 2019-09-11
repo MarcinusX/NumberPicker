@@ -273,17 +273,12 @@ class NumberPicker extends StatelessWidget {
                   return isExtra
                       ? new Container() //empty first and last element
                       : new Center(
-                          child: isChoose
-                              ? new Text(
-                                  getDisplayedValue(value),
-                                  style: itemStyle,
-                                )
-                              : new Opacity(
-                                  opacity: opacity,
-                                  child: new Text(
-                                    getDisplayedValue(value),
-                                    style: itemStyle,
-                                  )),
+                          child: new Opacity(
+                              opacity: isChoose ? 1 : opacity,
+                              child: new Text(
+                                getDisplayedValue(value),
+                                style: itemStyle,
+                              )),
                         );
                 },
               ),
@@ -326,16 +321,19 @@ class NumberPicker extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final int value = index - 1;
 
+                  bool isChoose = value == selectedIntValue && highlightSelectedValue;
                   //define special style for selected (middle) element
-                  final TextStyle itemStyle = value == selectedDecimalValue && highlightSelectedValue ? selectedStyle : defaultStyle;
+                  final TextStyle itemStyle = isChoose ? selectedStyle : defaultStyle;
 
                   bool isExtra = index == 0 || index == decimalItemCount - 1;
 
                   return isExtra
                       ? new Container() //empty first and last element
-                      : new Center(
-                          child: new Text(value.toString().padLeft(decimalPlaces, '0'), style: itemStyle),
-                        );
+                      : new Opacity(
+                          opacity: isChoose ? 1 : opacity,
+                          child: new Center(
+                            child: new Text(value.toString().padLeft(decimalPlaces, '0'), style: itemStyle),
+                          ));
                 },
               ),
               _NumberPickerSelectedItemDecoration(
@@ -374,15 +372,15 @@ class NumberPicker extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   final int value = _intValueFromIndex(index);
 
+                  bool isChoose = value == selectedIntValue && highlightSelectedValue;
                   //define special style for selected (middle) element
-                  final TextStyle itemStyle = value == selectedIntValue && highlightSelectedValue ? selectedStyle : defaultStyle;
+                  final TextStyle itemStyle = isChoose ? selectedStyle : defaultStyle;
 
-                  return new Center(
-                    child: new Text(
-                      getDisplayedValue(value),
-                      style: itemStyle,
-                    ),
-                  );
+                  return new Opacity(
+                      opacity: isChoose ? 1 : opacity,
+                      child: new Center(
+                        child: new Text(getDisplayedValue(value), style: itemStyle),
+                      ));
                 },
               ),
               _NumberPickerSelectedItemDecoration(
@@ -579,6 +577,7 @@ class NumberPickerDialog extends StatefulWidget {
   final bool zeroPad;
   final bool highlightSelectedValue;
   final Decoration decoration;
+  final double opacity;
 
   ///constructor for integer values
   NumberPickerDialog.integer({
@@ -592,6 +591,7 @@ class NumberPickerDialog extends StatefulWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.opacity = 1,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? new Text("OK"),
@@ -609,6 +609,7 @@ class NumberPickerDialog extends StatefulWidget {
     this.titlePadding,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.opacity = 1,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? new Text("OK"),
@@ -645,6 +646,7 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
           decimalPlaces: widget.decimalPlaces,
           highlightSelectedValue: widget.highlightSelectedValue,
           decoration: widget.decoration,
+          opacity: widget.opacity,
           onChanged: _handleValueChanged);
     } else {
       return new NumberPicker.integer(
@@ -656,6 +658,7 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
         zeroPad: widget.zeroPad,
         highlightSelectedValue: widget.highlightSelectedValue,
         decoration: widget.decoration,
+        opacity: widget.opacity,
         onChanged: _handleValueChanged,
       );
     }
