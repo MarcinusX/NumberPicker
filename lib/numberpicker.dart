@@ -18,19 +18,20 @@ class NumberPicker extends StatelessWidget {
   static const double kDefaultListViewCrossAxisSize = 100.0;
 
   ///constructor for horizontal number picker
-  NumberPicker.horizontal({
-    Key key,
-    @required int initialValue,
-    @required this.minValue,
-    @required this.maxValue,
-    @required this.onChanged,
-    this.itemExtent = kDefaultItemExtent,
-    this.listViewHeight = kDefaultListViewCrossAxisSize,
-    this.step = 1,
-    this.zeroPad = false,
-    this.highlightSelectedValue = true,
-    this.decoration,
-  })  : assert(initialValue != null),
+  NumberPicker.horizontal(
+      {Key key,
+      @required int initialValue,
+      @required this.minValue,
+      @required this.maxValue,
+      @required this.onChanged,
+      this.itemExtent = kDefaultItemExtent,
+      this.listViewHeight = kDefaultListViewCrossAxisSize,
+      this.step = 1,
+      this.zeroPad = false,
+      this.highlightSelectedValue = true,
+      this.decoration,
+      this.opacity = 1})
+      : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
         assert(maxValue > minValue),
@@ -50,21 +51,22 @@ class NumberPicker extends StatelessWidget {
         super(key: key);
 
   ///constructor for integer number picker
-  NumberPicker.integer({
-    Key key,
-    @required int initialValue,
-    @required this.minValue,
-    @required this.maxValue,
-    @required this.onChanged,
-    this.itemExtent = kDefaultItemExtent,
-    this.listViewWidth = kDefaultListViewCrossAxisSize,
-    this.step = 1,
-    this.scrollDirection = Axis.vertical,
-    this.infiniteLoop = false,
-    this.zeroPad = false,
-    this.highlightSelectedValue = true,
-    this.decoration,
-  })  : assert(initialValue != null),
+  NumberPicker.integer(
+      {Key key,
+      @required int initialValue,
+      @required this.minValue,
+      @required this.maxValue,
+      @required this.onChanged,
+      this.itemExtent = kDefaultItemExtent,
+      this.listViewWidth = kDefaultListViewCrossAxisSize,
+      this.step = 1,
+      this.scrollDirection = Axis.vertical,
+      this.infiniteLoop = false,
+      this.zeroPad = false,
+      this.highlightSelectedValue = true,
+      this.decoration,
+      this.opacity = 1})
+      : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
         assert(maxValue > minValue),
@@ -87,18 +89,19 @@ class NumberPicker extends StatelessWidget {
         super(key: key);
 
   ///constructor for decimal number picker
-  NumberPicker.decimal({
-    Key key,
-    @required double initialValue,
-    @required this.minValue,
-    @required this.maxValue,
-    @required this.onChanged,
-    this.decimalPlaces = 1,
-    this.itemExtent = kDefaultItemExtent,
-    this.listViewWidth = kDefaultListViewCrossAxisSize,
-    this.highlightSelectedValue = true,
-    this.decoration,
-  })  : assert(initialValue != null),
+  NumberPicker.decimal(
+      {Key key,
+      @required double initialValue,
+      @required this.minValue,
+      @required this.maxValue,
+      @required this.onChanged,
+      this.decimalPlaces = 1,
+      this.itemExtent = kDefaultItemExtent,
+      this.listViewWidth = kDefaultListViewCrossAxisSize,
+      this.highlightSelectedValue = true,
+      this.decoration,
+      this.opacity = 1})
+      : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
         assert(decimalPlaces != null && decimalPlaces > 0),
@@ -135,6 +138,8 @@ class NumberPicker extends StatelessWidget {
 
   ///height of every list element in pixels
   final double itemExtent;
+
+  final double opacity;
 
   ///height of list view in pixels
   final double listViewHeight;
@@ -273,19 +278,13 @@ class NumberPicker extends StatelessWidget {
                                   getDisplayedValue(value),
                                   style: itemStyle,
                                 )
-                              : new Stack(
-                                  children: <Widget>[
-                                    new Text(
-                                      getDisplayedValue(value),
-                                      style: itemStyle,
-                                    ),
-                                    new Opacity(
-                                        opacity: 0.6,
-                                        child: new Container(
-                                          color: Colors.white,
-                                        )),
-                                  ],
-                                ));
+                              : new Opacity(
+                                  opacity: opacity,
+                                  child: new Text(
+                                    getDisplayedValue(value),
+                                    style: itemStyle,
+                                  )),
+                        );
                 },
               ),
               _NumberPickerSelectedItemDecoration(
