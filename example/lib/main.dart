@@ -139,8 +139,9 @@ class _MyHomePageState extends State<MyHomePage> {
       initialValue: _currentHorizontalIntValue,
       minValue: 0,
       maxValue: 100,
-      step: 10,
-      zeroPad: true,
+      widthWidget: 260.0,
+      itemExtent: 86.0,
+      zeroPad: false,
       onChanged: (value) => setState(() => _currentHorizontalIntValue = value),
     );
     integerInfiniteNumberPicker = new NumberPicker.integer(

@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:infinite_listview/infinite_listview.dart';
+import 'package:numberpicker/widgets/button_left.dart';
+import 'package:numberpicker/widgets/button_right.dart';
 
 /// Created by Marcin Szałek
 
@@ -30,6 +32,7 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.widthWidget = kDefaultListViewCrossAxisSize,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -44,7 +47,7 @@ class NumberPicker extends StatelessWidget {
         ),
         scrollDirection = Axis.horizontal,
         decimalScrollController = null,
-        listViewWidth = 3 * itemExtent,
+        listViewWidth = widthWidget,
         infiniteLoop = false,
         integerItemCount = (maxValue - minValue) ~/ step + 1,
         super(key: key);
@@ -56,6 +59,7 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    this.widthWidget,
     this.itemExtent = kDefaultItemExtent,
     this.listViewWidth = kDefaultListViewCrossAxisSize,
     this.step = 1,
@@ -95,6 +99,7 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    this.widthWidget,
     this.decimalPlaces = 1,
     this.itemExtent = kDefaultItemExtent,
     this.listViewWidth = kDefaultListViewCrossAxisSize,
@@ -129,6 +134,12 @@ class NumberPicker extends StatelessWidget {
 
   ///called when selected value changes
   final ValueChanged<num> onChanged;
+
+  ///width number pick
+  final double widthWidget;
+
+  ///height number pick
+  //final double heightWidget;
 
   ///min value user can pick
   final int minValue;
@@ -349,6 +360,34 @@ class NumberPicker extends StatelessWidget {
                 axis: scrollDirection,
                 itemExtent: itemExtent,
                 decoration: decoration,
+              ),
+              Visibility(
+                visible: (maxValue > 1),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: ButtonLeft(
+                    height: 60.0,
+                    width: 60.0,
+                    onPressed: (){
+                      int newPosition = selectedIntValue - 1;
+                      animateInt(newPosition);
+                    },
+                  ),
+                ),
+              ),
+              Visibility(
+                  visible: (maxValue > 1),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: ButtonRight(
+                      height: 60.0,
+                      width: 60.0,
+                      onPressed: (){
+                        int newPosition = selectedIntValue + 1;
+                        animateInt(newPosition);
+                      },
+                    ),
+                  )
               ),
             ],
           ),
