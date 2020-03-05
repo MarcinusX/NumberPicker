@@ -1,3 +1,7 @@
+## [1.2.0]
+
+* Added a text mapper to customize number text
+
 ## [1.1.0]
 * Added zero-pad
 * Added custom decoration for selected value

@@ -1,9 +1,6 @@
 name: numberpicker
-version: 1.1.0
+version: 1.2.0
 description: NumberPicker is a widget allowing user to choose numbers by scrolling spinners.
-authors:
-  - Marcin Szalek <marcinszalek1@gmail.com>
-  - Monika Stobieniecka <mstobieniecka1@gmail.com>
 homepage: https://github.com/MarcinusX/NumberPicker
 
 environment:
