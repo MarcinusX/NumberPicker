@@ -7,6 +7,9 @@ import 'package:infinite_listview/infinite_listview.dart';
 
 /// Created by Marcin Szałek
 
+///Define a text mapper to transform the text displayed by the picker
+typedef String TextMapper(String numberText);
+
 ///NumberPicker is a widget designed to pick a number between #minValue and #maxValue
 class NumberPicker extends StatelessWidget {
   ///height of every list element for normal number picker
@@ -24,6 +27,7 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    this.textMapper,
     this.itemExtent = kDefaultItemExtent,
     this.listViewHeight = kDefaultListViewCrossAxisSize,
     this.step = 1,
@@ -56,6 +60,7 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    this.textMapper,
     this.itemExtent = kDefaultItemExtent,
     this.listViewWidth = kDefaultListViewCrossAxisSize,
     this.step = 1,
@@ -95,6 +100,7 @@ class NumberPicker extends StatelessWidget {
     @required this.minValue,
     @required this.maxValue,
     @required this.onChanged,
+    this.textMapper,
     this.decimalPlaces = 1,
     this.itemExtent = kDefaultItemExtent,
     this.listViewWidth = kDefaultListViewCrossAxisSize,
@@ -135,6 +141,9 @@ class NumberPicker extends StatelessWidget {
 
   ///max value user can pick
   final int maxValue;
+  
+  ///build the text of each item on the picker
+  final TextMapper textMapper;
 
   ///inidcates how many decimal places to show
   /// e.g. 0=>[1,2,3...], 1=>[1.0, 1.1, 1.2...]  2=>[1.00, 1.01, 1.02...]
@@ -410,9 +419,10 @@ class NumberPicker extends StatelessWidget {
   }
 
   String getDisplayedValue(int value) {
-    return zeroPad
+    final text = zeroPad
         ? value.toString().padLeft(maxValue.toString().length, '0')
         : value.toString();
+    return textMapper != null ? textMapper(text) : text;
   }
 
   //
