@@ -34,6 +34,7 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.selectedValueColor,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -69,6 +70,7 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.selectedValueColor,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -106,6 +108,7 @@ class NumberPicker extends StatelessWidget {
     this.listViewWidth = kDefaultListViewCrossAxisSize,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.selectedValueColor,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -175,6 +178,9 @@ class NumberPicker extends StatelessWidget {
 
   ///Decoration to apply to central box where the selected value is placed
   final Decoration decoration;
+
+  ///Color Of Selected Number
+  final Color selectedValueColor;
 
   ///Step between elements. Only for integer datePicker
   ///Examples:
@@ -252,7 +258,7 @@ class NumberPicker extends StatelessWidget {
   Widget _integerListView(ThemeData themeData) {
     TextStyle defaultStyle = themeData.textTheme.body1;
     TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+        themeData.textTheme.headline.copyWith(color: selectedValueColor);
 
     var listItemCount = integerItemCount + 2;
 
@@ -312,7 +318,7 @@ class NumberPicker extends StatelessWidget {
   Widget _decimalListView(ThemeData themeData) {
     TextStyle defaultStyle = themeData.textTheme.body1;
     TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+        themeData.textTheme.headline.copyWith(color: selectedValueColor);
 
     int decimalItemCount =
         selectedIntValue == maxValue ? 3 : math.pow(10, decimalPlaces) + 2;
@@ -370,7 +376,7 @@ class NumberPicker extends StatelessWidget {
   Widget _integerInfiniteListView(ThemeData themeData) {
     TextStyle defaultStyle = themeData.textTheme.body1;
     TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+        themeData.textTheme.headline.copyWith(color: selectedValueColor);
 
     return Listener(
       onPointerUp: (ev) {
