@@ -1,3 +1,9 @@
+## [1.2.1]
+
+* Added optional haptics
+* Added missing params to NumberPickerDialog
+* Minor code cleanups
+
 ## [1.2.0]
 
 * Added a text mapper to customize number text
