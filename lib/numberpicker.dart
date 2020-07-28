@@ -141,7 +141,7 @@ class NumberPicker extends StatelessWidget {
 
   ///max value user can pick
   final int maxValue;
-  
+
   ///build the text of each item on the picker
   final TextMapper textMapper;
 
@@ -617,6 +617,7 @@ class NumberPickerDialog extends StatefulWidget {
   final bool zeroPad;
   final bool highlightSelectedValue;
   final Decoration decoration;
+  final TextMapper textMapper;
 
   ///constructor for integer values
   NumberPickerDialog.integer({
@@ -630,6 +631,7 @@ class NumberPickerDialog extends StatefulWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.textMapper,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? new Text("OK"),
@@ -647,6 +649,7 @@ class NumberPickerDialog extends StatefulWidget {
     this.titlePadding,
     this.highlightSelectedValue = true,
     this.decoration,
+    this.textMapper,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? new Text("OK"),
@@ -680,13 +683,15 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
   NumberPicker _buildNumberPicker() {
     if (widget.decimalPlaces > 0) {
       return new NumberPicker.decimal(
-          initialValue: selectedDoubleValue,
-          minValue: widget.minValue,
-          maxValue: widget.maxValue,
-          decimalPlaces: widget.decimalPlaces,
-          highlightSelectedValue: widget.highlightSelectedValue,
-          decoration: widget.decoration,
-          onChanged: _handleValueChanged);
+        initialValue: selectedDoubleValue,
+        minValue: widget.minValue,
+        maxValue: widget.maxValue,
+        decimalPlaces: widget.decimalPlaces,
+        highlightSelectedValue: widget.highlightSelectedValue,
+        decoration: widget.decoration,
+        onChanged: _handleValueChanged,
+        textMapper: widget.textMapper,
+      );
     } else {
       return new NumberPicker.integer(
         initialValue: selectedIntValue,
@@ -698,6 +703,7 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
         highlightSelectedValue: widget.highlightSelectedValue,
         decoration: widget.decoration,
         onChanged: _handleValueChanged,
+        textMapper: widget.textMapper,
       );
     }
   }
