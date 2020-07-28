@@ -124,15 +124,15 @@ class NumberPicker extends StatelessWidget {
         assert(initialValue >= minValue && initialValue <= maxValue),
         selectedIntValue = initialValue.floor(),
         selectedDecimalValue = ((initialValue - initialValue.floorToDouble()) *
-            math.pow(10, decimalPlaces))
+              math.pow(10, decimalPlaces))
             .round(),
         intScrollController = ScrollController(
           initialScrollOffset: (initialValue.floor() - minValue) * itemExtent,
         ),
         decimalScrollController = ScrollController(
           initialScrollOffset: ((initialValue - initialValue.floorToDouble()) *
-              math.pow(10, decimalPlaces))
-              .roundToDouble() *
+                  math.pow(10, decimalPlaces))
+                .roundToDouble() *
               itemExtent,
         ),
         listViewHeight = 3 * itemExtent,
@@ -239,7 +239,7 @@ class NumberPicker extends StatelessWidget {
   void animateDecimalAndInteger(double valueToSelect) {
     animateInt(valueToSelect.floor());
     animateDecimal(((valueToSelect - valueToSelect.floorToDouble()) *
-        math.pow(10, decimalPlaces))
+          math.pow(10, decimalPlaces))
         .round());
   }
 
@@ -269,6 +269,10 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerListView(ThemeData themeData) {
+    TextStyle defaultStyle = textStyle ?? themeData.textTheme.body1;
+    TextStyle selectedStyle =
+        selectedTextStyle ?? themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+
     var listItemCount = integerItemCount + 2;
 
     return Listener(
