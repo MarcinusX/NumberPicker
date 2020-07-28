@@ -34,7 +34,8 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
-    this.selectedValueColor,
+    this.textStyle,
+    this.selectedTextStyle,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -70,7 +71,8 @@ class NumberPicker extends StatelessWidget {
     this.zeroPad = false,
     this.highlightSelectedValue = true,
     this.decoration,
-    this.selectedValueColor,
+    this.textStyle,
+    this.selectedTextStyle,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -108,7 +110,8 @@ class NumberPicker extends StatelessWidget {
     this.listViewWidth = kDefaultListViewCrossAxisSize,
     this.highlightSelectedValue = true,
     this.decoration,
-    this.selectedValueColor,
+    this.textStyle,
+    this.selectedTextStyle,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -179,8 +182,11 @@ class NumberPicker extends StatelessWidget {
   ///Decoration to apply to central box where the selected value is placed
   final Decoration decoration;
 
-  ///Color Of Selected Number
-  final Color selectedValueColor;
+  ///Default Style Of Numbers
+  final TextStyle textStyle;
+
+  ///Style Of Selected Number
+  final TextStyle selectedTextStyle;
 
   ///Step between elements. Only for integer datePicker
   ///Examples:
@@ -256,10 +262,6 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: selectedValueColor);
-
     var listItemCount = integerItemCount + 2;
 
     return Listener(
@@ -287,8 +289,8 @@ class NumberPicker extends StatelessWidget {
                   //define special style for selected (middle) element
                   final TextStyle itemStyle =
                       value == selectedIntValue && highlightSelectedValue
-                          ? selectedStyle
-                          : defaultStyle;
+                          ? selectedTextStyle
+                          : textStyle;
 
                   bool isExtra = index == 0 || index == listItemCount - 1;
 
@@ -316,10 +318,6 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _decimalListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: selectedValueColor);
-
     int decimalItemCount =
         selectedIntValue == maxValue ? 3 : math.pow(10, decimalPlaces) + 2;
 
@@ -346,8 +344,8 @@ class NumberPicker extends StatelessWidget {
                   //define special style for selected (middle) element
                   final TextStyle itemStyle =
                       value == selectedDecimalValue && highlightSelectedValue
-                          ? selectedStyle
-                          : defaultStyle;
+                          ? selectedTextStyle
+                          : textStyle;
 
                   bool isExtra = index == 0 || index == decimalItemCount - 1;
 
@@ -374,10 +372,6 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerInfiniteListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: selectedValueColor);
-
     return Listener(
       onPointerUp: (ev) {
         ///used to detect that user stopped scrolling
@@ -400,8 +394,8 @@ class NumberPicker extends StatelessWidget {
                   //define special style for selected (middle) element
                   final TextStyle itemStyle =
                       value == selectedIntValue && highlightSelectedValue
-                          ? selectedStyle
-                          : defaultStyle;
+                          ? selectedTextStyle
+                          : textStyle;
 
                   return new Center(
                     child: new Text(
@@ -728,3 +722,4 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
     );
   }
 }
+
