@@ -79,7 +79,7 @@ class NumberPicker extends StatelessWidget {
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
-        assert(maxValue > minValue),
+        assert(maxValue >= minValue),
         assert(initialValue >= minValue && initialValue <= maxValue),
         assert(step > 0),
         assert(scrollDirection != null),
@@ -120,7 +120,7 @@ class NumberPicker extends StatelessWidget {
         assert(minValue != null),
         assert(maxValue != null),
         assert(decimalPlaces != null && decimalPlaces > 0),
-        assert(maxValue > minValue),
+        assert(maxValue >= minValue),
         assert(initialValue >= minValue && initialValue <= maxValue),
         selectedIntValue = initialValue.floor(),
         selectedDecimalValue = ((initialValue - initialValue.floorToDouble()) *
