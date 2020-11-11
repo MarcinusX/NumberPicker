@@ -36,6 +36,9 @@ class NumberPicker extends StatelessWidget {
     this.highlightSelectedValue = true,
     this.decoration,
     this.haptics = false,
+    this.fontFamily,
+    this.selectedTextColor,
+    this.textColor,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -72,6 +75,9 @@ class NumberPicker extends StatelessWidget {
     this.highlightSelectedValue = true,
     this.decoration,
     this.haptics = false,
+    this.fontFamily,
+    this.selectedTextColor,
+    this.textColor,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -110,6 +116,9 @@ class NumberPicker extends StatelessWidget {
     this.highlightSelectedValue = true,
     this.decoration,
     this.haptics = false,
+    this.fontFamily,
+    this.selectedTextColor,
+    this.textColor,
   })  : assert(initialValue != null),
         assert(minValue != null),
         assert(maxValue != null),
@@ -202,6 +211,15 @@ class NumberPicker extends StatelessWidget {
   ///Whether to trigger haptic pulses or not
   final bool haptics;
 
+  ///Font family to set on NumberPicker
+  final String fontFamily;
+
+  ///Color for focused texts
+  final Color selectedTextColor;
+
+  ///Color for unfocused texts
+  final Color textColor;
+
   //
   //----------------------------- PUBLIC ------------------------------
   //
@@ -257,9 +275,13 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+    TextStyle defaultStyle = themeData.textTheme.body1
+        .copyWith(fontFamily: fontFamily, color: textColor);
+    TextStyle selectedStyle = themeData.textTheme.headline.copyWith(
+        color: selectedTextColor == null
+            ? themeData.accentColor
+            : selectedTextColor,
+        fontFamily: fontFamily);
 
     var listItemCount = integerItemCount + 2;
 
@@ -317,9 +339,13 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _decimalListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+    TextStyle defaultStyle = themeData.textTheme.body1
+        .copyWith(fontFamily: fontFamily, color: textColor);
+    TextStyle selectedStyle = themeData.textTheme.headline.copyWith(
+        color: selectedTextColor == null
+            ? themeData.accentColor
+            : selectedTextColor,
+        fontFamily: fontFamily);
 
     int decimalItemCount =
         selectedIntValue == maxValue ? 3 : math.pow(10, decimalPlaces) + 2;
@@ -376,9 +402,13 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerInfiniteListView(ThemeData themeData) {
-    TextStyle defaultStyle = themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+    TextStyle defaultStyle = themeData.textTheme.body1
+        .copyWith(fontFamily: fontFamily, color: textColor);
+    TextStyle selectedStyle = themeData.textTheme.headline.copyWith(
+        color: selectedTextColor == null
+            ? themeData.accentColor
+            : selectedTextColor,
+        fontFamily: fontFamily);
 
     return Listener(
       onPointerUp: (ev) {
@@ -637,6 +667,9 @@ class NumberPickerDialog extends StatefulWidget {
   final Decoration decoration;
   final TextMapper textMapper;
   final bool haptics;
+  final String fontFamily;
+  final Color selectedTextColor;
+  final Color textColor;
 
   ///constructor for integer values
   NumberPickerDialog.integer({
@@ -652,6 +685,9 @@ class NumberPickerDialog extends StatefulWidget {
     this.decoration,
     this.textMapper,
     this.haptics = false,
+    this.fontFamily,
+    this.selectedTextColor,
+    this.textColor,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? Text("OK"),
@@ -671,6 +707,9 @@ class NumberPickerDialog extends StatefulWidget {
     this.decoration,
     this.textMapper,
     this.haptics = false,
+    this.fontFamily,
+    this.selectedTextColor,
+    this.textColor,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? Text("OK"),

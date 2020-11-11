@@ -141,6 +141,8 @@ class _MyHomePageState extends State<MyHomePage> {
       maxValue: 100,
       step: 10,
       zeroPad: true,
+      fontFamily: 'dancing',
+      selectedTextColor: Colors.red,
       onChanged: (value) => setState(() => _currentHorizontalIntValue = value),
     );
     integerInfiniteNumberPicker = new NumberPicker.integer(

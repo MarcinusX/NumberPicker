@@ -51,3 +51,7 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
+  fonts:
+    - family: dancing
+      fonts:
+        - asset: assets/fonts/dancing.ttf
