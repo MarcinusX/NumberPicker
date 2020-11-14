@@ -1,3 +1,10 @@
+# Changelog
+
+## [1.3.0]
+
+* Added `textStyle` and `selectedTextStyle` params (Thanks to @AliRn76)
+* Made animate methods asynchronous
+
 ## [1.2.1]
 
 * Added optional haptics

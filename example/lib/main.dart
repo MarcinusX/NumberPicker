@@ -75,14 +75,15 @@ class _MyHomePageState extends State<MyHomePage> {
             Column(
               children: <Widget>[
                 SizedBox(height: 16),
-                Text('Default', style: Theme.of(context).textTheme.title),
+                Text('Default', style: Theme.of(context).textTheme.headline6),
                 integerNumberPicker,
                 new RaisedButton(
                   onPressed: () => _showIntDialog(),
                   child: new Text("Current int value: $_currentIntValue"),
                 ),
                 Divider(color: Colors.grey, height: 32),
-                Text('Horizontal', style: Theme.of(context).textTheme.title),
+                Text('Horizontal',
+                    style: Theme.of(context).textTheme.headline6),
                 horizontalNumberPicker,
                 Text(
                   "Current int value: $_currentHorizontalIntValue",
@@ -104,14 +105,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Column(
               children: <Widget>[
                 SizedBox(height: 16),
-                Text('Default', style: Theme.of(context).textTheme.title),
+                Text('Default', style: Theme.of(context).textTheme.headline6),
                 integerInfiniteNumberPicker,
                 new RaisedButton(
                   onPressed: () => _showInfIntDialog(),
                   child: new Text("Current int value: $_currentInfIntValue"),
                 ),
                 Divider(color: Colors.grey, height: 32),
-                Text('Decorated', style: Theme.of(context).textTheme.title),
+                Text('Decorated', style: Theme.of(context).textTheme.headline6),
                 integerInfiniteDecoratedNumberPicker,
                 Text(
                   "Current int value: $_currentInfIntValueDecorated",

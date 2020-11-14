@@ -219,21 +219,19 @@ class NumberPicker extends StatelessWidget {
   //
 
   /// Used to animate integer number picker to new selected value
-  void animateInt(int valueToSelect) {
+  Future<void> animateInt(int valueToSelect) {
     int diff = valueToSelect - minValue;
     int index = diff ~/ step;
-    animateIntToIndex(index);
+    return animateIntToIndex(index);
   }
 
   /// Used to animate integer number picker to new selected index
-  void animateIntToIndex(int index) {
-    _animate(intScrollController, index * itemExtent);
-  }
+  Future<void> animateIntToIndex(int index) =>
+      _animate(intScrollController, index * itemExtent);
 
   /// Used to animate decimal part of double value to new selected value
-  void animateDecimal(int decimalValue) {
-    _animate(decimalScrollController, decimalValue * itemExtent);
-  }
+  Future<void> animateDecimal(int decimalValue) =>
+      _animate(decimalScrollController, decimalValue * itemExtent);
 
   /// Used to animate decimal number picker to selected value
   void animateDecimalAndInteger(double valueToSelect) {
@@ -269,15 +267,16 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerListView(ThemeData themeData) {
-    TextStyle defaultStyle = textStyle ?? themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        selectedTextStyle ?? themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+    TextStyle defaultStyle = textStyle ?? themeData.textTheme.bodyText2;
+    TextStyle selectedStyle = selectedTextStyle ??
+        themeData.textTheme.headline5.copyWith(color: themeData.accentColor);
 
     var listItemCount = integerItemCount + 2;
 
     return Listener(
       onPointerUp: (ev) {
         ///used to detect that user stopped scrolling
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         if (intScrollController.position.activity is HoldScrollActivity) {
           animateInt(selectedIntValue);
         }
@@ -329,9 +328,9 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _decimalListView(ThemeData themeData) {
-    TextStyle defaultStyle = textStyle ?? themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        selectedTextStyle ?? themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+    TextStyle defaultStyle = textStyle ?? themeData.textTheme.bodyText2;
+    TextStyle selectedStyle = selectedTextStyle ??
+        themeData.textTheme.headline5.copyWith(color: themeData.accentColor);
 
     int decimalItemCount =
         selectedIntValue == maxValue ? 3 : math.pow(10, decimalPlaces) + 2;
@@ -339,6 +338,7 @@ class NumberPicker extends StatelessWidget {
     return Listener(
       onPointerUp: (ev) {
         ///used to detect that user stopped scrolling
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         if (decimalScrollController.position.activity is HoldScrollActivity) {
           animateDecimal(selectedDecimalValue);
         }
@@ -388,13 +388,14 @@ class NumberPicker extends StatelessWidget {
   }
 
   Widget _integerInfiniteListView(ThemeData themeData) {
-    TextStyle defaultStyle = textStyle ?? themeData.textTheme.body1;
-    TextStyle selectedStyle =
-        selectedTextStyle ?? themeData.textTheme.headline.copyWith(color: themeData.accentColor);
+    TextStyle defaultStyle = textStyle ?? themeData.textTheme.bodyText2;
+    TextStyle selectedStyle = selectedTextStyle ??
+        themeData.textTheme.headline5.copyWith(color: themeData.accentColor);
 
     return Listener(
       onPointerUp: (ev) {
         ///used to detect that user stopped scrolling
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         if (intScrollController.position.activity is HoldScrollActivity) {
           _animateIntWhenUserStoppedScrolling(selectedIntValue);
         }
@@ -562,6 +563,7 @@ class NumberPicker extends StatelessWidget {
   ) {
     return notification is UserScrollNotification &&
         notification.direction == ScrollDirection.idle &&
+        // ignore: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
         scrollController.position.activity is! HoldScrollActivity;
   }
 
@@ -594,8 +596,8 @@ class NumberPicker extends StatelessWidget {
   }
 
   ///scroll to selected value
-  _animate(ScrollController scrollController, double value) {
-    scrollController.animateTo(
+  Future<void> _animate(ScrollController scrollController, double value) {
+    return scrollController.animateTo(
       value,
       duration: Duration(seconds: 1),
       curve: ElasticOutCurve(),
@@ -649,6 +651,8 @@ class NumberPickerDialog extends StatefulWidget {
   final Decoration decoration;
   final TextMapper textMapper;
   final bool haptics;
+  final TextStyle textStyle;
+  final TextStyle selectedTextStyle;
 
   ///constructor for integer values
   NumberPickerDialog.integer({
@@ -664,6 +668,8 @@ class NumberPickerDialog extends StatefulWidget {
     this.decoration,
     this.textMapper,
     this.haptics = false,
+    this.textStyle,
+    this.selectedTextStyle,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? Text("OK"),
@@ -683,6 +689,8 @@ class NumberPickerDialog extends StatefulWidget {
     this.decoration,
     this.textMapper,
     this.haptics = false,
+    this.textStyle,
+    this.selectedTextStyle,
     Widget confirmWidget,
     Widget cancelWidget,
   })  : confirmWidget = confirmWidget ?? Text("OK"),
@@ -724,6 +732,8 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
         onChanged: _handleValueChanged,
         textMapper: widget.textMapper,
         haptics: widget.haptics,
+        textStyle: widget.textStyle,
+        selectedTextStyle: widget.selectedTextStyle,
       );
     } else {
       return NumberPicker.integer(
@@ -738,6 +748,8 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
         onChanged: _handleValueChanged,
         textMapper: widget.textMapper,
         haptics: widget.haptics,
+        textStyle: widget.textStyle,
+        selectedTextStyle: widget.selectedTextStyle,
       );
     }
   }
@@ -762,4 +774,3 @@ class _NumberPickerDialogControllerState extends State<NumberPickerDialog> {
     );
   }
 }
-
