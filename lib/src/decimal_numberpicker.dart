@@ -16,6 +16,9 @@ class DecimalNumberPicker extends StatelessWidget {
   final TextStyle? textStyle;
   final TextStyle? selectedTextStyle;
   final bool haptics;
+
+  /// Inidcates how many decimal places to show
+  /// e.g. 0=>[1,2,3...], 1=>[1.0, 1.1, 1.2...]  2=>[1.00, 1.01, 1.02...]
   final int decimalPlaces;
 
   const DecimalNumberPicker({
