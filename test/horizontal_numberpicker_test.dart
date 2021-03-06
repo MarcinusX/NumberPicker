@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+
 import 'test_utils.dart';
 
 void main() {
@@ -75,33 +76,6 @@ void main() {
       initialValue: 0,
       scrollBy: 3,
       expectedValue: 3,
-      axis: Axis.horizontal,
-    );
-  });
-
-  testWidgets('Min value==step, force animate', (WidgetTester tester) async {
-    await testNumberPicker(
-      tester: tester,
-      minValue: 10,
-      maxValue: 50,
-      step: 10,
-      initialValue: 10,
-      scrollBy: 2,
-      expectedValue: 30,
-      animateToItself: true,
-      axis: Axis.horizontal,
-    );
-  });
-
-  testWidgets('Force animate works', (WidgetTester tester) async {
-    await testNumberPicker(
-      tester: tester,
-      minValue: 10,
-      maxValue: 50,
-      initialValue: 10,
-      scrollBy: 13,
-      expectedValue: 23,
-      animateToItself: true,
       axis: Axis.horizontal,
     );
   });

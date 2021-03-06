@@ -67,29 +67,6 @@ void main() {
         expectedValue: 3);
   });
 
-  testWidgets('Min value==step, force animate', (WidgetTester tester) async {
-    await testNumberPicker(
-        tester: tester,
-        minValue: 10,
-        maxValue: 50,
-        step: 10,
-        initialValue: 10,
-        scrollBy: 2,
-        expectedValue: 30,
-        animateToItself: true);
-  });
-
-  testWidgets('Force animate works', (WidgetTester tester) async {
-    await testNumberPicker(
-        tester: tester,
-        minValue: 10,
-        maxValue: 50,
-        initialValue: 10,
-        scrollBy: 13,
-        expectedValue: 23,
-        animateToItself: true);
-  });
-
   testWidgets('Zero pad works', (WidgetTester tester) async {
     await testMultipleValuesInPicker(
         tester: tester,
@@ -109,7 +86,6 @@ void main() {
       initialValue: 2,
       scrollBy: 2,
       expectedValue: 4,
-      highlightSelectedValue: false,
       decoration: decoration,
     );
   });
@@ -124,5 +100,4 @@ void main() {
         textMapper: (text) => '$text days',
         expectedDisplayValues: ['2 days', '3 days', '4 days']);
   });
-
 }
