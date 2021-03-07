@@ -12,6 +12,7 @@
 * Changed animation curve to `Curves.easeOutCubic`.
 * Changed `initialValue` to `value` to avoid confusion from my awful naming.
 * Removed `highlightSelectedValue` as it can be obtained by providing `selectedTextStyle`.
+* Migrated example to Android embedding v2
 * Fixed some minor bugs.
 
 ## [1.3.0]
