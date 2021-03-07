@@ -16,23 +16,23 @@ void main() {
   });
 }
 
-Future<NumberPicker> _testNumberPicker(
-    {WidgetTester tester,
-    int minValue,
-    int maxValue,
-    double initialValue,
-    int scrollByInt,
-    int scrollByDecimal,
-    int decimalPlaces = 1,
-    double expectedValue,
-    bool animateToItself = false}) async {
+Future<DecimalNumberPicker> _testNumberPicker({
+  required WidgetTester tester,
+  required int minValue,
+  required int maxValue,
+  required double initialValue,
+  required int scrollByInt,
+  required int scrollByDecimal,
+  int decimalPlaces = 1,
+  required double expectedValue,
+}) async {
   double value = initialValue;
-  NumberPicker picker;
+  late DecimalNumberPicker picker;
 
   await tester.pumpWidget(
     StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-      picker = NumberPicker.decimal(
-        initialValue: value,
+      picker = DecimalNumberPicker(
+        value: value,
         minValue: minValue,
         maxValue: maxValue,
         decimalPlaces: decimalPlaces,
@@ -50,18 +50,9 @@ Future<NumberPicker> _testNumberPicker(
   await _scrollNumberPicker(Offset(0.0, 0.0), tester, scrollByInt, true);
   await tester.pumpAndSettle();
 
-
-
   await _scrollNumberPicker(Offset(0.0, 0.0), tester, scrollByDecimal, false);
   await tester.pumpAndSettle();
   expect(value, equals(expectedValue));
-
-  if (animateToItself) {
-    expect(picker.selectedIntValue, equals(expectedValue));
-    await picker.animateInt(picker.selectedIntValue);
-    await tester.pumpAndSettle();
-    expect(picker.selectedIntValue, equals(expectedValue));
-  }
   return picker;
 }
 
@@ -69,7 +60,7 @@ _scrollNumberPicker(Offset pickerPosition, WidgetTester tester, int scrollBy,
     bool integer) async {
   Offset pickerCenter = Offset(
     pickerPosition.dx + (integer ? 300.0 : 400.0),
-    pickerPosition.dy + 1.5 * NumberPicker.kDefaultItemExtent,
+    pickerPosition.dy + 1.5 * 50,
   );
   final TestGesture testGesture = await tester.startGesture(pickerCenter);
   await testGesture.moveBy(Offset(
