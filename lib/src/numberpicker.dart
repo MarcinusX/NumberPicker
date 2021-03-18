@@ -210,7 +210,7 @@ class _NumberPickerState extends State<NumberPicker> {
   }
 
   void _maybeCenterValue() {
-    if (!isScrolling) {
+    if (_scrollController.hasClients && !isScrolling) {
       int diff = widget.value - widget.minValue;
       int index = diff ~/ widget.step;
       _scrollController.animateTo(
