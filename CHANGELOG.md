@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.1]
+
+* Fixed empty scrollController position bug #95 
+
 ## [2.0.0] **BREAKING CHANGES**
 * Migrate to **null-safety**.
 * Changed named constructors to two separate widgets.
