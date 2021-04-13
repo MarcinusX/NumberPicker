@@ -4,6 +4,7 @@
 
 * Added missing params in decimal numberpicker. #99 
 * Fixed `itemCount` parameter to actually work. #87
+* Added `padding: EdgeInsets.zero` to ListView to make it work without SafeArea. #74
 
 ## [2.0.1]
 
