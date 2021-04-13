@@ -2,7 +2,8 @@
 
 ## [2.1.0]
 
-* Added missing params in decimal numberpicker #99 
+* Added missing params in decimal numberpicker. #99 
+* Fixed `itemCount` parameter to actually work. #87
 
 ## [2.0.1]
 
