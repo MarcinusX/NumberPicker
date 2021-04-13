@@ -94,7 +94,8 @@ class _NumberPickerState extends State<NumberPicker> {
   void _scrollListener() {
     final indexOfMiddleElement =
         (_scrollController.offset / itemExtent).round().clamp(0, itemCount - 1);
-    final intValueInTheMiddle = _intValueFromIndex(indexOfMiddleElement + 1);
+    final intValueInTheMiddle =
+        _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
 
     if (widget.value != intValueInTheMiddle) {
       widget.onChanged(intValueInTheMiddle);
@@ -129,7 +130,9 @@ class _NumberPickerState extends State<NumberPicker> {
 
   int get itemCount => (widget.maxValue - widget.minValue) ~/ widget.step + 1;
 
-  int get listItemsCount => itemCount + 2;
+  int get listItemsCount => itemCount + 2 * additionalItemsOnEachSide;
+
+  int get additionalItemsOnEachSide => (widget.itemCount - 1) ~/ 2;
 
   @override
   Widget build(BuildContext context) {
@@ -174,7 +177,8 @@ class _NumberPickerState extends State<NumberPicker> {
         themeData.textTheme.headline5?.copyWith(color: themeData.accentColor);
 
     final value = _intValueFromIndex(index);
-    final isExtra = index == 0 || index == listItemsCount - 1;
+    final isExtra = index < additionalItemsOnEachSide ||
+        index >= listItemsCount - additionalItemsOnEachSide;
     final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
 
     final child = isExtra
@@ -204,7 +208,7 @@ class _NumberPickerState extends State<NumberPicker> {
   }
 
   int _intValueFromIndex(int index) {
-    index--;
+    index -= additionalItemsOnEachSide;
     index %= itemCount;
     return widget.minValue + index * widget.step;
   }
