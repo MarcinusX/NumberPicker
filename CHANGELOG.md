@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.0]
+
+* Added missing params in decimal numberpicker #99 
+
 ## [2.0.1]
 
 * Fixed empty scrollController position bug #95 
