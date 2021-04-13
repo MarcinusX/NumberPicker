@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:infinite_listview/infinite_listview.dart';
 
 typedef TextMapper = String Function(String numberText);
 
@@ -54,6 +55,8 @@ class NumberPicker extends StatefulWidget {
   /// Decoration to apply to central box where the selected value is placed
   final Decoration? decoration;
 
+  final bool infiteLoop;
+
   const NumberPicker({
     Key? key,
     required this.minValue,
@@ -71,6 +74,7 @@ class NumberPicker extends StatefulWidget {
     this.decoration,
     this.zeroPad = false,
     this.textMapper,
+    this.infiteLoop = false,
   })  : assert(minValue <= value),
         assert(value <= maxValue),
         super(key: key);
@@ -87,13 +91,22 @@ class _NumberPickerState extends State<NumberPicker> {
     super.initState();
     final initialOffset =
         (widget.value - widget.minValue) ~/ widget.step * itemExtent;
-    _scrollController = ScrollController(initialScrollOffset: initialOffset)
-      ..addListener(_scrollListener);
+    if (widget.infiteLoop) {
+      _scrollController =
+          InfiniteScrollController(initialScrollOffset: initialOffset);
+    } else {
+      _scrollController = ScrollController(initialScrollOffset: initialOffset);
+    }
+    _scrollController.addListener(_scrollListener);
   }
 
   void _scrollListener() {
-    final indexOfMiddleElement =
-        (_scrollController.offset / itemExtent).round().clamp(0, itemCount - 1);
+    var indexOfMiddleElement = (_scrollController.offset / itemExtent).round();
+    if (widget.infiteLoop) {
+      indexOfMiddleElement %= itemCount;
+    } else {
+      indexOfMiddleElement = indexOfMiddleElement.clamp(0, itemCount - 1);
+    }
     final intValueInTheMiddle =
         _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
 
@@ -152,14 +165,23 @@ class _NumberPickerState extends State<NumberPicker> {
         },
         child: Stack(
           children: [
-            ListView.builder(
-              itemCount: listItemsCount,
-              scrollDirection: widget.axis,
-              controller: _scrollController,
-              itemExtent: itemExtent,
-              itemBuilder: _itemBuilder,
-              padding: EdgeInsets.zero,
-            ),
+            if (widget.infiteLoop)
+              InfiniteListView.builder(
+                scrollDirection: widget.axis,
+                controller: _scrollController as InfiniteScrollController,
+                itemExtent: itemExtent,
+                itemBuilder: _itemBuilder,
+                padding: EdgeInsets.zero,
+              )
+            else
+              ListView.builder(
+                itemCount: listItemsCount,
+                scrollDirection: widget.axis,
+                controller: _scrollController,
+                itemExtent: itemExtent,
+                itemBuilder: _itemBuilder,
+                padding: EdgeInsets.zero,
+              ),
             _NumberPickerSelectedItemDecoration(
               axis: widget.axis,
               itemExtent: itemExtent,
@@ -177,9 +199,10 @@ class _NumberPickerState extends State<NumberPicker> {
     final selectedStyle = widget.selectedTextStyle ??
         themeData.textTheme.headline5?.copyWith(color: themeData.accentColor);
 
-    final value = _intValueFromIndex(index);
-    final isExtra = index < additionalItemsOnEachSide ||
-        index >= listItemsCount - additionalItemsOnEachSide;
+    final value = _intValueFromIndex(index % itemCount);
+    final isExtra = !widget.infiteLoop &&
+        (index < additionalItemsOnEachSide ||
+            index >= listItemsCount - additionalItemsOnEachSide);
     final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
 
     final child = isExtra
@@ -218,6 +241,11 @@ class _NumberPickerState extends State<NumberPicker> {
     if (_scrollController.hasClients && !isScrolling) {
       int diff = widget.value - widget.minValue;
       int index = diff ~/ widget.step;
+      if (widget.infiteLoop) {
+        final offset = _scrollController.offset + 0.5 * itemExtent;
+        final cycles = (offset / (itemCount * itemExtent)).floor();
+        index += cycles * itemCount;
+      }
       _scrollController.animateTo(
         index * itemExtent,
         duration: Duration(milliseconds: 300),
