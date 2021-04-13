@@ -158,6 +158,7 @@ class _NumberPickerState extends State<NumberPicker> {
               controller: _scrollController,
               itemExtent: itemExtent,
               itemBuilder: _itemBuilder,
+              padding: EdgeInsets.zero,
             ),
             _NumberPickerSelectedItemDecoration(
               axis: widget.axis,
