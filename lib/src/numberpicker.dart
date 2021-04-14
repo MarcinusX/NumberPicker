@@ -55,7 +55,7 @@ class NumberPicker extends StatefulWidget {
   /// Decoration to apply to central box where the selected value is placed
   final Decoration? decoration;
 
-  final bool infiteLoop;
+  final bool infiniteLoop;
 
   const NumberPicker({
     Key? key,
@@ -74,7 +74,7 @@ class NumberPicker extends StatefulWidget {
     this.decoration,
     this.zeroPad = false,
     this.textMapper,
-    this.infiteLoop = false,
+    this.infiniteLoop = false,
   })  : assert(minValue <= value),
         assert(value <= maxValue),
         super(key: key);
@@ -91,7 +91,7 @@ class _NumberPickerState extends State<NumberPicker> {
     super.initState();
     final initialOffset =
         (widget.value - widget.minValue) ~/ widget.step * itemExtent;
-    if (widget.infiteLoop) {
+    if (widget.infiniteLoop) {
       _scrollController =
           InfiniteScrollController(initialScrollOffset: initialOffset);
     } else {
@@ -102,7 +102,7 @@ class _NumberPickerState extends State<NumberPicker> {
 
   void _scrollListener() {
     var indexOfMiddleElement = (_scrollController.offset / itemExtent).round();
-    if (widget.infiteLoop) {
+    if (widget.infiniteLoop) {
       indexOfMiddleElement %= itemCount;
     } else {
       indexOfMiddleElement = indexOfMiddleElement.clamp(0, itemCount - 1);
@@ -165,7 +165,7 @@ class _NumberPickerState extends State<NumberPicker> {
         },
         child: Stack(
           children: [
-            if (widget.infiteLoop)
+            if (widget.infiniteLoop)
               InfiniteListView.builder(
                 scrollDirection: widget.axis,
                 controller: _scrollController as InfiniteScrollController,
@@ -200,7 +200,7 @@ class _NumberPickerState extends State<NumberPicker> {
         themeData.textTheme.headline5?.copyWith(color: themeData.accentColor);
 
     final value = _intValueFromIndex(index % itemCount);
-    final isExtra = !widget.infiteLoop &&
+    final isExtra = !widget.infiniteLoop &&
         (index < additionalItemsOnEachSide ||
             index >= listItemsCount - additionalItemsOnEachSide);
     final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
@@ -241,7 +241,7 @@ class _NumberPickerState extends State<NumberPicker> {
     if (_scrollController.hasClients && !isScrolling) {
       int diff = widget.value - widget.minValue;
       int index = diff ~/ widget.step;
-      if (widget.infiteLoop) {
+      if (widget.infiniteLoop) {
         final offset = _scrollController.offset + 0.5 * itemExtent;
         final cycles = (offset / (itemCount * itemExtent)).floor();
         index += cycles * itemCount;

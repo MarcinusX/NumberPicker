@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.1]
+
+* Fixed `infiteLoop` to `infiniteLoop` typo...
+
 ## [2.1.0]
 
 * Added missing params in decimal numberpicker. #99 
