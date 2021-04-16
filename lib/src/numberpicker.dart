@@ -4,6 +4,13 @@ import 'package:flutter/services.dart';
 import 'package:infinite_listview/infinite_listview.dart';
 
 typedef TextMapper = String Function(String numberText);
+typedef NumberPickerCustomItemBuilder = Widget Function({
+  required BuildContext context,
+  required int index,
+  required int intValue,
+  required String displayValue,
+  required bool isSelected,
+});
 
 class NumberPicker extends StatefulWidget {
   /// Min value user can pick
@@ -57,6 +64,9 @@ class NumberPicker extends StatefulWidget {
 
   final bool infiniteLoop;
 
+  /// allows building custom item widget on the list
+  final NumberPickerCustomItemBuilder? customItemBuilder;
+
   const NumberPicker({
     Key? key,
     required this.minValue,
@@ -75,6 +85,7 @@ class NumberPicker extends StatefulWidget {
     this.zeroPad = false,
     this.textMapper,
     this.infiniteLoop = false,
+    this.customItemBuilder,
   })  : assert(minValue <= value),
         assert(value <= maxValue),
         super(key: key);
@@ -205,12 +216,24 @@ class _NumberPickerState extends State<NumberPicker> {
             index >= listItemsCount - additionalItemsOnEachSide);
     final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
 
-    final child = isExtra
-        ? SizedBox.shrink()
-        : Text(
-            _getDisplayedValue(value),
-            style: itemStyle,
-          );
+    final customItemBuilder = widget.customItemBuilder;
+    Widget child = const SizedBox.shrink();
+    if (!isExtra) {
+      if (customItemBuilder != null) {
+        child = customItemBuilder(
+          context: context,
+          index: index,
+          intValue: value,
+          displayValue: _getDisplayedValue(value),
+          isSelected: value == widget.value,
+        );
+      } else {
+        child = Text(
+          _getDisplayedValue(value),
+          style: itemStyle,
+        );
+      }
+    }
 
     return Container(
       width: widget.itemWidth,

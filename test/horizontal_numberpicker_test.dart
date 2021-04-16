@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -13,6 +16,31 @@ void main() {
       scrollBy: 2,
       expectedValue: 7,
       axis: Axis.horizontal,
+    );
+  });
+
+  testWidgets('Integer small scroll up works + custom item builder',
+      (WidgetTester tester) async {
+    await testNumberPicker(
+      tester: tester,
+      minValue: 1,
+      maxValue: 10,
+      initialValue: 5,
+      scrollBy: 2,
+      expectedValue: 7,
+      axis: Axis.horizontal,
+      customItemBuilder: (
+              {required context,
+              required displayValue,
+              required index,
+              required intValue,
+              required isSelected}) =>
+          Text(
+        displayValue,
+        style: isSelected
+            ? TextStyle(color: Colors.amber)
+            : TextStyle(color: Colors.amberAccent),
+      ),
     );
   });
 

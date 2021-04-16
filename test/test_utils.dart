@@ -26,6 +26,7 @@ Future<NumberPicker> testNumberPicker({
   required int expectedValue,
   Axis axis = Axis.vertical,
   Decoration? decoration,
+  NumberPickerCustomItemBuilder? customItemBuilder,
 }) async {
   int value = initialValue;
   late NumberPicker picker;
@@ -40,6 +41,7 @@ Future<NumberPicker> testNumberPicker({
               step: step,
               textMapper: textMapper,
               decoration: decoration,
+              customItemBuilder: customItemBuilder,
               onChanged: (newValue) => setState(() => value = newValue),
             )
           : NumberPicker(
@@ -50,6 +52,7 @@ Future<NumberPicker> testNumberPicker({
               step: step,
               textMapper: textMapper,
               decoration: decoration,
+              customItemBuilder: customItemBuilder,
               onChanged: (newValue) => setState(() => value = newValue),
             );
       return MaterialApp(
