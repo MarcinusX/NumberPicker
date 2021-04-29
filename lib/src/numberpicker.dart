@@ -212,11 +212,23 @@ class _NumberPickerState extends State<NumberPicker> {
             style: itemStyle,
           );
 
-    return Container(
-      width: widget.itemWidth,
-      height: widget.itemHeight,
-      alignment: Alignment.center,
-      child: child,
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTapUp: isExtra
+          ? (_) => {}
+          : (_) {
+              _scrollController.animateTo(
+                (index - 1) * itemExtent,
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOutCubic,
+              );
+            },
+      child: Container(
+        width: widget.itemWidth,
+        height: widget.itemHeight,
+        alignment: Alignment.center,
+        child: child,
+      ),
     );
   }
 
