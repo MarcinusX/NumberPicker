@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter/material.dart';
 
 import 'test_utils.dart';
 
@@ -98,6 +99,17 @@ void main() {
         initialValue: 2,
         scrollBy: 1,
         textMapper: (text) => '$text days',
+        expectedDisplayValues: ['2 days', '3 days', '4 days']);
+  });
+
+  testWidgets('Item mapper works', (WidgetTester tester) async {
+    await testMultipleValuesInPicker(
+        tester: tester,
+        minValue: 0,
+        maxValue: 10,
+        initialValue: 2,
+        scrollBy: 1,
+        itemMapper: (text, style) => Text('$text days', style: style),
         expectedDisplayValues: ['2 days', '3 days', '4 days']);
   });
 }

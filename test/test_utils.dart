@@ -77,6 +77,7 @@ Future<NumberPicker> testMultipleValuesInPicker({
   required int scrollBy,
   int step = 1,
   TextMapper? textMapper,
+  ItemMapper? itemMapper,
   bool animateToItself = false,
   Axis axis = Axis.vertical,
   bool zeroPad = false,
@@ -94,6 +95,7 @@ Future<NumberPicker> testMultipleValuesInPicker({
               maxValue: maxValue,
               step: step,
               textMapper: textMapper,
+              itemMapper: itemMapper,
               onChanged: (newValue) => setState(() => value = newValue),
               zeroPad: zeroPad,
             )
@@ -103,6 +105,7 @@ Future<NumberPicker> testMultipleValuesInPicker({
               maxValue: maxValue,
               step: step,
               textMapper: textMapper,
+              itemMapper: itemMapper,
               zeroPad: zeroPad,
               onChanged: (newValue) => setState(() => value = newValue),
             );
