@@ -217,7 +217,7 @@ class _NumberPickerState extends State<NumberPicker> {
       width: widget.itemWidth,
       height: widget.itemHeight,
       alignment: Alignment.center,
-      child: Center(child: child),
+      child: child,
     );
   }
 
