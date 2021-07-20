@@ -57,6 +57,7 @@ class DecimalNumberPicker extends StatelessWidget {
     this.decimalDecoration,
   })  : assert(minValue <= value),
         assert(value <= maxValue),
+        assert(decimalStepCount > 0),
         super(key: key);
 
   @override
@@ -66,8 +67,8 @@ class DecimalNumberPicker extends StatelessWidget {
     final decimalValue =
         isMax ? 0 : ((value - value.floorToDouble()) * tenPow).round();
     final doubleMaxValue = isMax ? 0 : tenPow.toInt() - 1;
-    final decimalStep = tenPow ~/ decimalStepCount;
-
+    final decimalStep =
+        (tenPow > decimalStepCount) ? tenPow ~/ decimalStepCount : 1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
