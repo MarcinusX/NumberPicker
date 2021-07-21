@@ -13,6 +13,7 @@ class NumberPicker extends StatefulWidget {
   final int maxValue;
 
   /// Currently selected value
+  /// Will be the index if a list is being used (isFromList == true)
   final int value;
 
   /// Called when selected value changes
@@ -57,6 +58,13 @@ class NumberPicker extends StatefulWidget {
 
   final bool infiniteLoop;
 
+  /// List of values to choose from.
+  /// Will be empty by default (if isFromList == false)
+  final List<int> valuesList;
+
+  /// Indicates if values are will be selected from valuesList or not.
+  final bool isFromList;
+
   const NumberPicker({
     Key? key,
     required this.minValue,
@@ -77,6 +85,32 @@ class NumberPicker extends StatefulWidget {
     this.infiniteLoop = false,
   })  : assert(minValue <= value),
         assert(value <= maxValue),
+        this.valuesList = const [],
+        this.isFromList = false,
+        super(key: key);
+
+  const NumberPicker.fromList({
+    Key? key,
+    required this.valuesList,
+    required this.value,
+    required this.onChanged,
+    this.itemCount = 3,
+    this.itemHeight = 50,
+    this.itemWidth = 100,
+    this.axis = Axis.vertical,
+    this.textStyle,
+    this.selectedTextStyle,
+    this.haptics = false,
+    this.decoration,
+    this.zeroPad = false,
+    this.textMapper,
+    this.infiniteLoop = false,
+  })  : assert(0 <= value),
+        assert(value <= valuesList.length - 1),
+        this.minValue = 0,
+        this.maxValue = valuesList.length - 1,
+        this.step = 1,
+        this.isFromList = true,
         super(key: key);
 
   @override
@@ -107,8 +141,9 @@ class _NumberPickerState extends State<NumberPicker> {
     } else {
       indexOfMiddleElement = indexOfMiddleElement.clamp(0, itemCount - 1);
     }
-    final intValueInTheMiddle =
-        _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
+    final intValueInTheMiddle = widget.isFromList
+        ? _correctIndex(indexOfMiddleElement + additionalItemsOnEachSide)
+        : _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
 
     if (widget.value != intValueInTheMiddle) {
       widget.onChanged(intValueInTheMiddle);
@@ -118,7 +153,7 @@ class _NumberPickerState extends State<NumberPicker> {
     }
     Future.delayed(
       Duration(milliseconds: 100),
-      () => _maybeCenterValue(),
+          () => _maybeCenterValue(),
     );
   }
 
@@ -199,7 +234,9 @@ class _NumberPickerState extends State<NumberPicker> {
     final selectedStyle = widget.selectedTextStyle ??
         themeData.textTheme.headline5?.copyWith(color: themeData.accentColor);
 
-    final value = _intValueFromIndex(index % itemCount);
+    final value = widget.isFromList
+        ? _correctIndex(index % itemCount)
+        : _intValueFromIndex(index % itemCount);
     final isExtra = !widget.infiniteLoop &&
         (index < additionalItemsOnEachSide ||
             index >= listItemsCount - additionalItemsOnEachSide);
@@ -208,9 +245,9 @@ class _NumberPickerState extends State<NumberPicker> {
     final child = isExtra
         ? SizedBox.shrink()
         : Text(
-            _getDisplayedValue(value),
-            style: itemStyle,
-          );
+      _getDisplayedValue(value),
+      style: itemStyle,
+    );
 
     return Container(
       width: widget.itemWidth,
@@ -221,6 +258,10 @@ class _NumberPickerState extends State<NumberPicker> {
   }
 
   String _getDisplayedValue(int value) {
+    if (widget.isFromList) {
+      value = _intValueFromList(value);
+    }
+
     final text = widget.zeroPad
         ? value.toString().padLeft(widget.maxValue.toString().length, '0')
         : value.toString();
@@ -231,9 +272,19 @@ class _NumberPickerState extends State<NumberPicker> {
     }
   }
 
-  int _intValueFromIndex(int index) {
+  int _correctIndex(int index) {
     index -= additionalItemsOnEachSide;
     index %= itemCount;
+    return index;
+  }
+
+  int _intValueFromList(int index) {
+    index = _correctIndex(index);
+    return widget.valuesList[index];
+  }
+
+  int _intValueFromIndex(int index) {
+    index = _correctIndex(index);
     return widget.minValue + index * widget.step;
   }
 
