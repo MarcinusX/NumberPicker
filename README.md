@@ -18,16 +18,20 @@ class __IntegerExampleState extends State<_IntegerExample> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        NumberPicker(
-          value: _currentValue,
-          minValue: 0,
-          maxValue: 100,
-          onChanged: (value) => setState(() => _currentValue = value),
-        ),
-        Text('Current value: $_currentValue'),
-      ],
+    return StatefulBuilder(
+      builder: (context4, setState2) {
+        return  Column(
+          children: <Widget>[
+            NumberPicker(
+              value: _currentValue,
+              minValue: 0,
+              maxValue: 100,
+              onChanged: (value) => setState2(() => _currentValue = value),
+            ),
+            Text('Current value: $_currentValue'),
+          ],
+        );
+      },
     );
   }
 }
