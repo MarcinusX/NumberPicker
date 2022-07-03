@@ -171,7 +171,7 @@ class _NumberPickerState extends State<NumberPicker> {
               InfiniteListView.builder(
                 physics: widget.onChanged == null
                     ? NeverScrollableScrollPhysics()
-                    : null,
+                    : BouncingScrollPhysics(),
                 scrollDirection: widget.axis,
                 controller: _scrollController as InfiniteScrollController,
                 itemExtent: itemExtent,
@@ -182,7 +182,7 @@ class _NumberPickerState extends State<NumberPicker> {
               ListView.builder(
                 physics: widget.onChanged == null
                     ? NeverScrollableScrollPhysics()
-                    : null,
+                    : BouncingScrollPhysics(),
                 itemCount: listItemsCount,
                 scrollDirection: widget.axis,
                 controller: _scrollController,
