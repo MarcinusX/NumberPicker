@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:infinite_listview/infinite_listview.dart';
@@ -149,6 +148,8 @@ class _NumberPickerState extends State<NumberPicker> {
 
   @override
   Widget build(BuildContext context) {
+    print(
+        '----------------------------------start----------------------------------');
     return SizedBox(
       width: widget.axis == Axis.vertical
           ? widget.itemWidth
@@ -197,19 +198,35 @@ class _NumberPickerState extends State<NumberPicker> {
     final themeData = Theme.of(context);
     final defaultStyle = widget.textStyle ?? themeData.textTheme.bodyText2;
     final selectedStyle = widget.selectedTextStyle ??
-        themeData.textTheme.headline5?.copyWith(color: themeData.accentColor);
+        themeData.textTheme.headline5
+            ?.copyWith(color: themeData.colorScheme.secondary);
+    final oneBeforeOrAfterStyle =
+        defaultStyle?.copyWith(color: defaultStyle.color?.withOpacity(.6));
+    final otherTextStyle =
+        defaultStyle?.copyWith(color: defaultStyle.color?.withOpacity(.2));
 
     final value = _intValueFromIndex(index % itemCount);
     final isExtra = !widget.infiniteLoop &&
         (index < additionalItemsOnEachSide ||
             index >= listItemsCount - additionalItemsOnEachSide);
-    final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
-
+    final isOneBefore = widget.value - widget.step == value ||
+        (widget.value == widget.minValue && value == widget.maxValue);
+    final isOneAfter = widget.value + widget.step == value ||
+        (widget.value == widget.maxValue && value == widget.minValue);
+    final isOneBeforeOrAfter = isOneAfter || isOneBefore;
+    final itemStyle = value == widget.value
+        ? selectedStyle
+        : isOneBeforeOrAfter
+            ? oneBeforeOrAfterStyle
+            : otherTextStyle;
     final child = isExtra
         ? SizedBox.shrink()
-        : Text(
-            _getDisplayedValue(value),
-            style: itemStyle,
+        : AnimatedDefaultTextStyle(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.ease,
+            style: itemStyle?.copyWith(fontFamily: selectedStyle?.fontFamily) ??
+                TextStyle(),
+            child: Text(_getDisplayedValue(value)),
           );
 
     return Container(
@@ -249,7 +266,7 @@ class _NumberPickerState extends State<NumberPicker> {
       _scrollController.animateTo(
         index * itemExtent,
         duration: Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic,
+        curve: Curves.ease,
       );
     }
   }
