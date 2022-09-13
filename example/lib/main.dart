@@ -61,15 +61,22 @@ class __IntegerExampleState extends State<_IntegerExample> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         SizedBox(height: 16),
         Text('Default', style: Theme.of(context).textTheme.headline6),
         NumberPicker(
           value: _currentIntValue,
-          minValue: 0,
-          maxValue: 100,
-          step: 10,
+          minValue: 1,
+          maxValue: 10,
+          step: 1,
           haptics: true,
+          itemCount: 10,
+          infiniteLoop: true,
+          itemHeight: 40,
+          itemWidth: 56,
+          selectedTextStyle: TextStyle(color: Color(0xFF3B5B6A), fontSize: 18),
+          textStyle: TextStyle(color: Color(0xFF7A909F), fontSize: 14),
           onChanged: (value) => setState(() => _currentIntValue = value),
         ),
         SizedBox(height: 32),
@@ -79,53 +86,16 @@ class __IntegerExampleState extends State<_IntegerExample> {
             IconButton(
               icon: Icon(Icons.remove),
               onPressed: () => setState(() {
-                final newValue = _currentIntValue - 10;
-                _currentIntValue = newValue.clamp(0, 100);
+                final newValue = _currentIntValue - 1;
+                _currentIntValue = newValue.clamp(1, 10);
               }),
             ),
             Text('Current int value: $_currentIntValue'),
             IconButton(
               icon: Icon(Icons.add),
               onPressed: () => setState(() {
-                final newValue = _currentIntValue + 20;
-                _currentIntValue = newValue.clamp(0, 100);
-              }),
-            ),
-          ],
-        ),
-        Divider(color: Colors.grey, height: 32),
-        SizedBox(height: 16),
-        Text('Horizontal', style: Theme.of(context).textTheme.headline6),
-        NumberPicker(
-          value: _currentHorizontalIntValue,
-          minValue: 0,
-          maxValue: 100,
-          step: 10,
-          itemHeight: 100,
-          axis: Axis.horizontal,
-          onChanged: (value) =>
-              setState(() => _currentHorizontalIntValue = value),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.black26),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            IconButton(
-              icon: Icon(Icons.remove),
-              onPressed: () => setState(() {
-                final newValue = _currentHorizontalIntValue - 10;
-                _currentHorizontalIntValue = newValue.clamp(0, 100);
-              }),
-            ),
-            Text('Current horizontal int value: $_currentHorizontalIntValue'),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: () => setState(() {
-                final newValue = _currentHorizontalIntValue + 20;
-                _currentHorizontalIntValue = newValue.clamp(0, 100);
+                final newValue = _currentIntValue + 1;
+                _currentIntValue = newValue.clamp(1, 10);
               }),
             ),
           ],
