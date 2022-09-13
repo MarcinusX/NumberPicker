@@ -56,12 +56,15 @@ class NumberPicker extends StatefulWidget {
 
   final bool infiniteLoop;
 
+  final bool makeNotSelectedValueTransparent;
+
   const NumberPicker({
     Key? key,
     required this.minValue,
     required this.maxValue,
     required this.value,
     required this.onChanged,
+    this.makeNotSelectedValueTransparent = false,
     this.itemCount = 3,
     this.step = 1,
     this.itemHeight = 50,
@@ -148,8 +151,6 @@ class _NumberPickerState extends State<NumberPicker> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        '----------------------------------start----------------------------------');
     return SizedBox(
       width: widget.axis == Axis.vertical
           ? widget.itemWidth
@@ -216,9 +217,11 @@ class _NumberPickerState extends State<NumberPicker> {
     final isOneBeforeOrAfter = isOneAfter || isOneBefore;
     final itemStyle = value == widget.value
         ? selectedStyle
-        : isOneBeforeOrAfter
-            ? oneBeforeOrAfterStyle
-            : otherTextStyle;
+        : !widget.makeNotSelectedValueTransparent
+            ? defaultStyle
+            : isOneBeforeOrAfter
+                ? oneBeforeOrAfterStyle
+                : otherTextStyle;
     final child = isExtra
         ? SizedBox.shrink()
         : AnimatedDefaultTextStyle(
