@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:infinite_listview/infinite_listview.dart';
@@ -80,7 +80,7 @@ class NumberPicker extends StatefulWidget {
         super(key: key);
 
   @override
-  _NumberPickerState createState() => _NumberPickerState();
+  State<NumberPicker> createState() => _NumberPickerState();
 }
 
 class _NumberPickerState extends State<NumberPicker> {
@@ -108,7 +108,7 @@ class _NumberPickerState extends State<NumberPicker> {
       indexOfMiddleElement = indexOfMiddleElement.clamp(0, itemCount - 1);
     }
     final intValueInTheMiddle =
-        _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
+    _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
 
     if (widget.value != intValueInTheMiddle) {
       widget.onChanged(intValueInTheMiddle);
@@ -117,8 +117,8 @@ class _NumberPickerState extends State<NumberPicker> {
       }
     }
     Future.delayed(
-      Duration(milliseconds: 100),
-      () => _maybeCenterValue(),
+      const Duration(milliseconds: 100),
+          () => _maybeCenterValue(),
     );
   }
 
@@ -206,17 +206,30 @@ class _NumberPickerState extends State<NumberPicker> {
     final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
 
     final child = isExtra
-        ? SizedBox.shrink()
+        ? const SizedBox.shrink()
         : Text(
-            _getDisplayedValue(value),
-            style: itemStyle,
-          );
+      _getDisplayedValue(value),
+      style: itemStyle,
+    );
 
-    return Container(
-      width: widget.itemWidth,
-      height: widget.itemHeight,
-      alignment: Alignment.center,
-      child: child,
+    return CupertinoButton(
+      onPressed: () {
+        if (!isExtra) {
+          widget.onChanged(value);
+          Future.delayed(
+            const Duration(milliseconds: 100),
+                () => _maybeCenterValue(),
+          );
+        }
+      },
+      padding: EdgeInsets.zero,
+      minSize: 0,
+      child: Container(
+        width: widget.itemWidth,
+        height: widget.itemHeight,
+        alignment: Alignment.center,
+        child: child,
+      ),
     );
   }
 
@@ -248,7 +261,7 @@ class _NumberPickerState extends State<NumberPicker> {
       }
       _scrollController.animateTo(
         index * itemExtent,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
       );
     }
