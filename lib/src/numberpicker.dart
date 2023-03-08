@@ -56,6 +56,9 @@ class NumberPicker extends StatefulWidget {
 
   final bool infiniteLoop;
 
+  final EdgeInsetsGeometry? itemPadding;
+  final Alignment? itemAlignment;
+
   const NumberPicker({
     Key? key,
     required this.minValue,
@@ -74,6 +77,8 @@ class NumberPicker extends StatefulWidget {
     this.zeroPad = false,
     this.textMapper,
     this.infiniteLoop = false,
+    this.itemPadding,
+    this.itemAlignment,
   })  : assert(minValue <= value),
         assert(value <= maxValue),
         super(key: key);
@@ -215,7 +220,8 @@ class _NumberPickerState extends State<NumberPicker> {
     return Container(
       width: widget.itemWidth,
       height: widget.itemHeight,
-      alignment: Alignment.center,
+      alignment: widget.itemAlignment??Alignment.center,
+      padding: widget.itemPadding,
       child: child,
     );
   }
