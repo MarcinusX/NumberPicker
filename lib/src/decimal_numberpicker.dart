@@ -26,9 +26,14 @@ class DecimalNumberPicker extends StatelessWidget {
   /// Decoration to apply to central box where the selected decimal value is placed
   final Decoration? decimalDecoration;
 
-  /// Inidcates how many decimal places to show
+  /// Indicates how many decimal places to show
   /// e.g. 0=>[1,2,3...], 1=>[1.0, 1.1, 1.2...]  2=>[1.00, 1.01, 1.02...]
   final int decimalPlaces;
+
+  /// Indicates Decimal's total step count - defaults to 10
+  /// e.g. if decimalStepCount = 4 and decimalPlaces = 2
+  /// => decimal choices would be 0.00, 0.25, 0.50, 0,75
+  final int decimalStepCount;
 
   const DecimalNumberPicker({
     Key? key,
@@ -37,6 +42,7 @@ class DecimalNumberPicker extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.itemCount = 3,
+    this.decimalStepCount = 10,
     this.itemHeight = 50,
     this.itemWidth = 100,
     this.axis = Axis.vertical,
@@ -51,16 +57,18 @@ class DecimalNumberPicker extends StatelessWidget {
     this.decimalDecoration,
   })  : assert(minValue <= value),
         assert(value <= maxValue),
+        assert(decimalStepCount > 0),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final isMax = value.floor() == maxValue;
-    final decimalValue = isMax
-        ? 0
-        : ((value - value.floorToDouble()) * math.pow(10, decimalPlaces))
-            .round();
-    final doubleMaxValue = isMax ? 0 : math.pow(10, decimalPlaces).toInt() - 1;
+    final tenPow = math.pow(10, decimalPlaces);
+    final decimalValue =
+        isMax ? 0 : ((value - value.floorToDouble()) * tenPow).round();
+    final doubleMaxValue = isMax ? 0 : tenPow.toInt() - 1;
+    final decimalStep =
+        (tenPow > decimalStepCount) ? tenPow ~/ decimalStepCount : 1;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -85,6 +93,7 @@ class DecimalNumberPicker extends StatelessWidget {
           value: decimalValue,
           onChanged: _onDoubleChanged,
           itemCount: itemCount,
+          step: decimalStep,
           itemHeight: itemHeight,
           itemWidth: itemWidth,
           textStyle: textStyle,
