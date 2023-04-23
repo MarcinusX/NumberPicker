@@ -103,8 +103,6 @@ class _NumberPickerState extends State<NumberPicker> {
     var indexOfMiddleElement = (_scrollController.offset / itemExtent).round();
     if (widget.infiniteLoop) {
       indexOfMiddleElement %= itemCount;
-    } else {
-      indexOfMiddleElement = indexOfMiddleElement.clamp(0, itemCount - 1);
     }
     final intValueInTheMiddle =
         _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
