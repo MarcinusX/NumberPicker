@@ -207,10 +207,15 @@ class _NumberPickerState extends State<NumberPicker> {
 
     final child = isExtra
         ? SizedBox.shrink()
-        : Text(
-            _getDisplayedValue(value),
-            style: itemStyle,
-          );
+        : InkWell(
+        onTap: () {
+          widget.onChanged(value);
+        },
+        child: Text(
+          _getDisplayedValue(value),
+          style: itemStyle,
+        ),
+    );
 
     return Container(
       width: widget.itemWidth,
