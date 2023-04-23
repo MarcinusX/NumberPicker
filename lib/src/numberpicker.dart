@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:infinite_listview/infinite_listview.dart';
 
 typedef TextMapper = String Function(String numberText);
+typedef ItemMapper = Widget Function(String numberText, TextStyle? style);
 
 class NumberPicker extends StatefulWidget {
   /// Min value user can pick
@@ -48,6 +49,9 @@ class NumberPicker extends StatefulWidget {
   /// Build the text of each item on the picker
   final TextMapper? textMapper;
 
+  /// Build the widget of each item on the picker
+  final ItemMapper? itemMapper;
+
   /// Pads displayed integer values up to the length of maxValue
   final bool zeroPad;
 
@@ -73,6 +77,7 @@ class NumberPicker extends StatefulWidget {
     this.decoration,
     this.zeroPad = false,
     this.textMapper,
+    this.itemMapper,
     this.infiniteLoop = false,
   })  : assert(minValue <= value),
         assert(value <= maxValue),
@@ -205,12 +210,8 @@ class _NumberPickerState extends State<NumberPicker> {
             index >= listItemsCount - additionalItemsOnEachSide);
     final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
 
-    final child = isExtra
-        ? SizedBox.shrink()
-        : Text(
-            _getDisplayedValue(value),
-            style: itemStyle,
-          );
+    final child =
+        isExtra ? SizedBox.shrink() : _getDisplayedValue(value, itemStyle);
 
     return Container(
       width: widget.itemWidth,
@@ -220,14 +221,16 @@ class _NumberPickerState extends State<NumberPicker> {
     );
   }
 
-  String _getDisplayedValue(int value) {
+  Widget _getDisplayedValue(int value, TextStyle? style) {
     final text = widget.zeroPad
         ? value.toString().padLeft(widget.maxValue.toString().length, '0')
         : value.toString();
-    if (widget.textMapper != null) {
-      return widget.textMapper!(text);
+    if (widget.itemMapper != null) {
+      return widget.itemMapper!(text, style);
+    } else if (widget.textMapper != null) {
+      return Text(widget.textMapper!(text), style: style);
     } else {
-      return text;
+      return Text(text, style: style);
     }
   }
 
