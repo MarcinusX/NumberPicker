@@ -63,7 +63,7 @@ class __IntegerExampleState extends State<_IntegerExample> {
     return Column(
       children: <Widget>[
         SizedBox(height: 16),
-        Text('Default', style: Theme.of(context).textTheme.headline6),
+        Text('Default', style: Theme.of(context).textTheme.titleLarge),
         NumberPicker(
           value: _currentIntValue,
           minValue: 0,
@@ -95,7 +95,7 @@ class __IntegerExampleState extends State<_IntegerExample> {
         ),
         Divider(color: Colors.grey, height: 32),
         SizedBox(height: 16),
-        Text('Horizontal', style: Theme.of(context).textTheme.headline6),
+        Text('Horizontal', style: Theme.of(context).textTheme.titleLarge),
         NumberPicker(
           value: _currentHorizontalIntValue,
           minValue: 0,
@@ -103,8 +103,7 @@ class __IntegerExampleState extends State<_IntegerExample> {
           step: 10,
           itemHeight: 100,
           axis: Axis.horizontal,
-          onChanged: (value) =>
-              setState(() => _currentHorizontalIntValue = value),
+          onChanged: (value) => setState(() => _currentHorizontalIntValue = value),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.black26),
@@ -148,7 +147,7 @@ class __DecimalExampleState extends State<_DecimalExample> {
     return Column(
       children: <Widget>[
         SizedBox(height: 16),
-        Text('Decimal', style: Theme.of(context).textTheme.headline6),
+        Text('Decimal', style: Theme.of(context).textTheme.titleLarge),
         DecimalNumberPicker(
           value: _currentDoubleValue,
           minValue: 0,
