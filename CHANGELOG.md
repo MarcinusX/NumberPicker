@@ -1,5 +1,8 @@
 # Changelog
 
+## [2.1.2]
+* Remove deprecated ThemeData's properties  
+
 ## [2.1.1]
 
 * Fixed `infiteLoop` to `infiniteLoop` typo...
