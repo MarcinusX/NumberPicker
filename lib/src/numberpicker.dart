@@ -114,10 +114,12 @@ class _NumberPickerState extends State<NumberPicker> {
         }
       }
     }
-    Future.delayed(
-      Duration(milliseconds: 100),
-      () => _maybeCenterValue(),
-    );
+    if (!isScrolling) {
+      Future.delayed(
+        Duration(milliseconds: 100),
+        () => _maybeCenterValue(),
+      );
+    }
   }
 
   @override
