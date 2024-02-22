@@ -15,7 +15,7 @@ class NumberPicker extends StatefulWidget {
   final int value;
 
   /// Called when selected value changes
-  final ValueChanged<int> onChanged;
+  final ValueChanged<int>? onChanged;
 
   /// Specifies how many items should be shown - defaults to 3
   final int itemCount;
@@ -61,7 +61,7 @@ class NumberPicker extends StatefulWidget {
     required this.minValue,
     required this.maxValue,
     required this.value,
-    required this.onChanged,
+    this.onChanged,
     this.itemCount = 3,
     this.step = 1,
     this.itemHeight = 50,
@@ -88,11 +88,9 @@ class _NumberPickerState extends State<NumberPicker> {
   @override
   void initState() {
     super.initState();
-    final initialOffset =
-        (widget.value - widget.minValue) ~/ widget.step * itemExtent;
+    final initialOffset = (widget.value - widget.minValue) ~/ widget.step * itemExtent;
     if (widget.infiniteLoop) {
-      _scrollController =
-          InfiniteScrollController(initialScrollOffset: initialOffset);
+      _scrollController = InfiniteScrollController(initialScrollOffset: initialOffset);
     } else {
       _scrollController = ScrollController(initialScrollOffset: initialOffset);
     }
@@ -106,19 +104,22 @@ class _NumberPickerState extends State<NumberPicker> {
     } else {
       indexOfMiddleElement = indexOfMiddleElement.clamp(0, itemCount - 1);
     }
-    final intValueInTheMiddle =
-        _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
+    final intValueInTheMiddle = _intValueFromIndex(indexOfMiddleElement + additionalItemsOnEachSide);
 
     if (widget.value != intValueInTheMiddle) {
-      widget.onChanged(intValueInTheMiddle);
-      if (widget.haptics) {
-        HapticFeedback.selectionClick();
+      if (widget.onChanged != null) {
+        widget.onChanged!(intValueInTheMiddle);
+        if (widget.haptics) {
+          HapticFeedback.selectionClick();
+        }
       }
     }
-    Future.delayed(
-      Duration(milliseconds: 100),
-      () => _maybeCenterValue(),
-    );
+    if (!isScrolling) {
+      Future.delayed(
+        Duration(milliseconds: 100),
+        () => _maybeCenterValue(),
+      );
+    }
   }
 
   @override
@@ -137,8 +138,7 @@ class _NumberPickerState extends State<NumberPicker> {
 
   bool get isScrolling => _scrollController.position.isScrollingNotifier.value;
 
-  double get itemExtent =>
-      widget.axis == Axis.vertical ? widget.itemHeight : widget.itemWidth;
+  double get itemExtent => widget.axis == Axis.vertical ? widget.itemHeight : widget.itemWidth;
 
   int get itemCount => (widget.maxValue - widget.minValue) ~/ widget.step + 1;
 
@@ -149,12 +149,8 @@ class _NumberPickerState extends State<NumberPicker> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: widget.axis == Axis.vertical
-          ? widget.itemWidth
-          : widget.itemCount * widget.itemWidth,
-      height: widget.axis == Axis.vertical
-          ? widget.itemCount * widget.itemHeight
-          : widget.itemHeight,
+      width: widget.axis == Axis.vertical ? widget.itemWidth : widget.itemCount * widget.itemWidth,
+      height: widget.axis == Axis.vertical ? widget.itemCount * widget.itemHeight : widget.itemHeight,
       child: NotificationListener<ScrollEndNotification>(
         onNotification: (not) {
           if (not.dragDetails?.primaryVelocity == 0) {
@@ -166,6 +162,7 @@ class _NumberPickerState extends State<NumberPicker> {
           children: [
             if (widget.infiniteLoop)
               InfiniteListView.builder(
+                physics: widget.onChanged == null ? NeverScrollableScrollPhysics() : BouncingScrollPhysics(),
                 scrollDirection: widget.axis,
                 controller: _scrollController as InfiniteScrollController,
                 itemExtent: itemExtent,
@@ -174,6 +171,7 @@ class _NumberPickerState extends State<NumberPicker> {
               )
             else
               ListView.builder(
+                physics: widget.onChanged == null ? NeverScrollableScrollPhysics() : BouncingScrollPhysics(),
                 itemCount: listItemsCount,
                 scrollDirection: widget.axis,
                 controller: _scrollController,
@@ -195,14 +193,12 @@ class _NumberPickerState extends State<NumberPicker> {
   Widget _itemBuilder(BuildContext context, int index) {
     final themeData = Theme.of(context);
     final defaultStyle = widget.textStyle ?? themeData.textTheme.bodyMedium;
-    final selectedStyle = widget.selectedTextStyle ??
-        themeData.textTheme.headlineSmall
-            ?.copyWith(color: themeData.colorScheme.secondary);
+    final selectedStyle =
+        widget.selectedTextStyle ?? themeData.textTheme.headlineSmall?.copyWith(color: themeData.colorScheme.secondary);
 
     final value = _intValueFromIndex(index % itemCount);
     final isExtra = !widget.infiniteLoop &&
-        (index < additionalItemsOnEachSide ||
-            index >= listItemsCount - additionalItemsOnEachSide);
+        (index < additionalItemsOnEachSide || index >= listItemsCount - additionalItemsOnEachSide);
     final itemStyle = value == widget.value ? selectedStyle : defaultStyle;
 
     final child = isExtra
@@ -221,9 +217,7 @@ class _NumberPickerState extends State<NumberPicker> {
   }
 
   String _getDisplayedValue(int value) {
-    final text = widget.zeroPad
-        ? value.toString().padLeft(widget.maxValue.toString().length, '0')
-        : value.toString();
+    final text = widget.zeroPad ? value.toString().padLeft(widget.maxValue.toString().length, '0') : value.toString();
     if (widget.textMapper != null) {
       return widget.textMapper!(text);
     } else {
